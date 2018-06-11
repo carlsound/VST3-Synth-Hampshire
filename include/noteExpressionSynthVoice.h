@@ -59,18 +59,11 @@ namespace Carlsound
 		
 				return level;
 			}	
-		
+
+			//---member variables----
 			enum {
 				kNumFrequencies = 128
 			};
-		
-			static float freqTab[kNumFrequencies];
-			static const float scaleHeadRoom;
-			static const float scaleNorm2GainC1;
-			static const float scaleNorm2GainC2;
-			static Steinberg::Vst::LogScale<Steinberg::Vst::ParamValue> freqLogScale;
-			static const double kNormTuningOneOctave;
-			static const double kNormTuningOneTune;
 		
 		};
 		
