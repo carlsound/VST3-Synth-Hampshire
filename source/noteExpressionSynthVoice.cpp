@@ -51,6 +51,7 @@ Steinberg::tresult GlobalParameterState::getState (Steinberg::IBStream* stream)
 }
 
 //-----------------------------------------------------------------------------
+/*
 float VoiceStatics::freqTab[VoiceStatics::kNumFrequencies];
 const float VoiceStatics::scaleHeadRoom = (float)(pow (10.0, -12.0 / 20.0) * 0.70710677); // for 12 dB head room
 const float VoiceStatics::scaleNorm2GainC1 = (float)(VoiceStatics::scaleHeadRoom * pow (10.0, 24.0 / 20.0));
@@ -59,8 +60,10 @@ Steinberg::Vst::LogScale<Steinberg::Vst::ParamValue> VoiceStatics::freqLogScale 
 
 const double VoiceStatics::kNormTuningOneOctave = 12.0 / 240.0;	// full in VST 3 is +- 10 octaves
 const double VoiceStatics::kNormTuningOneTune	= 1.0 / 240.0;
+ */
 
 //-----------------------------------------------------------------------------
+/*
 class VoiceStaticsOnce
 {
 public:
@@ -81,6 +84,9 @@ public:
 };
 
 static VoiceStaticsOnce gVoiceStaticsOnce;
+*/
+//-----------------------------------------------------------------------------
+
 
 	} // namespace Hampshire
 } // namespace Carlsound

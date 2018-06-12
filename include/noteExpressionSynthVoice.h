@@ -45,6 +45,7 @@ namespace Carlsound
 		};
 		
 		//-----------------------------------------------------------------------------
+		/*
 		class VoiceStatics
 		{
 			public:
@@ -66,6 +67,7 @@ namespace Carlsound
 			};
 		
 		};
+		*/
 		
 		//-----------------------------------------------------------------------------
 		/** Example Note Expression Synth Voice Class
@@ -96,6 +98,9 @@ namespace Carlsound
 		
 			Steinberg::Vst::ParamValue levelFromVel;
 			Steinberg::Vst::ParamValue noteOffVolumeRamp;
+
+			std::shared_ptr<maxiOsc> m_oscillator;
+			std::shared_ptr<maxiSettings> m_oscillatorSettings;
 		};
 		
 		//-----------------------------------------------------------------------------
@@ -110,8 +115,8 @@ namespace Carlsound
 				//------------------------------
 				case Steinberg::Vst::kVolumeTypeID:
 				{
-					Steinberg::Vst::ParamValue vol = VoiceStatics::normalizedLevel2Gain ((float)value);
-					Steinberg::Vst::VoiceBase<kNumParameters, SamplePrecision, 2, GlobalParameterState>::setNoteExpressionValue (kVolumeMod, vol);
+					//Steinberg::Vst::ParamValue vol = VoiceStatics::normalizedLevel2Gain ((float)value);
+					//Steinberg::Vst::VoiceBase<kNumParameters, SamplePrecision, 2, GlobalParameterState>::setNoteExpressionValue (kVolumeMod, vol);
 					break;
 				}
 				//------------------------------
@@ -127,36 +132,6 @@ namespace Carlsound
 		template<class SamplePrecision>
 		bool Voice<SamplePrecision>::process (SamplePrecision* outputBuffers[2], Steinberg::int32 numSamples)
 		{
-			//---compute tuning-------------------------
-		
-			// main tuning
-			Steinberg::Vst::ParamValue tuningInHz = 0.;
-			if (this->values[kTuningMod] != 0. || this->globalParameters->masterTuning != 0 || this->tuning != 0)
-			{
-				tuningInHz = VoiceStatics::freqTab[this->pitch] * (::pow (2.0, (this->values[kTuningMod] * 10 + this->globalParameters->masterTuning * 2.0 / 12.0 + this->tuning)) - 1);
-			}
-	
-			Steinberg::Vst::ParamValue triangleFreq = (VoiceStatics::freqTab[this->pitch] + tuningInHz) * M_PI_MUL_2 / this->getSampleRate () / 2.;
-			if (currentTriangleF == -1)
-				currentTriangleF = triangleFreq;
-			// check for frequency changes and update the phase so that it is crackle free
-			if (triangleFreq != currentTriangleF)
-			{
-				// update phase
-				trianglePhase = (SamplePrecision)((currentTriangleF - triangleFreq) * n + trianglePhase);
-				currentTriangleF = triangleFreq;
-			}
-			
-			//---calculate parameter ramps
-			Steinberg::Vst::ParamValue volumeRamp = 0.;
-			Steinberg::Vst::ParamValue rampTime = std::max<Steinberg::Vst::ParamValue> ((Steinberg::Vst::ParamValue)numSamples, (this->sampleRate * 0.005));
-			
-			Steinberg::Vst::ParamValue wantedVolume = VoiceStatics::normalizedLevel2Gain ((float)Steinberg::Bound (0.0, 1.0, this->globalParameters->masterVolume * levelFromVel + this->values[kVolumeMod]));
-			if (wantedVolume != currentVolume)
-			{
-				volumeRamp = (wantedVolume - currentVolume) / rampTime;
-			}
-		
 			for (Steinberg::int32 i = 0; i < numSamples; i++)
 			{
 				this->noteOnSampleOffset--;
@@ -207,7 +182,7 @@ namespace Carlsound
 			this->values[kVolumeMod] = 0;
 			levelFromVel = 1.f + this->globalParameters->velToLevel * (velocity - 1.);
 
-			currentSinusVolume = this->values[kSinusVolume] = this->globalParameters->sinusVolume;
+			//currentSinusVolume = this->values[kSinusVolume] = this->globalParameters->sinusVolume;
 		
 			Steinberg::Vst::VoiceBase<kNumParameters, SamplePrecision, 2, GlobalParameterState>::noteOn (_pitch, velocity, tuning, sampleOffset, nId);
 			this->noteOnSampleOffset++;
@@ -220,9 +195,9 @@ namespace Carlsound
 			Steinberg::Vst::VoiceBase<kNumParameters, SamplePrecision, 2, GlobalParameterState>::noteOff (velocity, sampleOffset);
 			this->noteOffSampleOffset++;
 		
-			Steinberg::Vst::ParamValue timeFactor = ::pow (100., this->values[kReleaseTimeMod]);
+			//Steinberg::Vst::ParamValue timeFactor = ::pow (100., this->values[kReleaseTimeMod]);
 			
-			noteOffVolumeRamp = 1.0 / (timeFactor * this->sampleRate * ((this->globalParameters->releaseTime * MAX_RELEASE_TIME_SEC) + 0.005));
+			//noteOffVolumeRamp = 1.0 / (timeFactor * this->sampleRate * ((this->globalParameters->releaseTime * MAX_RELEASE_TIME_SEC) + 0.005));
 			if (currentVolume)
 				noteOffVolumeRamp *= currentVolume;
 		}
@@ -247,15 +222,17 @@ namespace Carlsound
 		template<class SamplePrecision>
 		void Voice<SamplePrecision>::setSampleRate (Steinberg::Vst::ParamValue sampleRate)
 		{
-			filter->setSampleRate (sampleRate);
+			//filter->setSampleRate (sampleRate);
 			Steinberg::Vst::VoiceBase<kNumParameters, SamplePrecision, 2, GlobalParameterState>::setSampleRate (sampleRate);
+			//
+			m_oscillatorSettings->sampleRate = sampleRate;
 		}
 		
 		//-----------------------------------------------------------------------------
 		template<class SamplePrecision>
 		Voice<SamplePrecision>::~Voice ()
 		{
-			delete filter;
+			//delete filter;
 		}
 		
 	} // Hampshire
