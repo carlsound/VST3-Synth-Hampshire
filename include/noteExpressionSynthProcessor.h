@@ -6,6 +6,7 @@
 
 #include "public.sdk/source/vst/vstaudioeffect.h"
 
+#include "globalParameterState.h"
 #include "noteExpressionSynthController.h"
 #include "noteExpressionSynthVoice.h"
 

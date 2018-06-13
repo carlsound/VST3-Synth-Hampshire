@@ -15,6 +15,11 @@ set(synth_sources
     include/noteExpressionSynthVoice.h
     source/noteExpressionSynthVoice.cpp
     #---
+    include/noteExpressionSynthVoiceStatistics.h
+    source/noteExpressionSynthVoiceStatistics.cpp
+    #---
+    include/noteExpressionSynthVoiceStatisticsOnce.h
+    #---
     #---include/panNoteExpressionType.h
     #---
     #---include/releaseTimeModNoteExpressionType.h
