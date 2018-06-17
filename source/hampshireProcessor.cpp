@@ -1,7 +1,5 @@
 
-#include "../include/noteExpressionSynthProcessor.h"
-#include "../include/noteExpressionSynthIDs.h"
-#include "../include/noteExpressionSynthVoice.h"
+#include "../include/hampshireProcessor.h"
 
 #include "public.sdk/samples/vst/common/voiceprocessor.h"
 #include "pluginterfaces/base/ustring.h"
@@ -20,14 +18,10 @@ namespace Carlsound
 	{
 
 		//-----------------------------------------------------------------------------
-		Processor::Processor () : voiceProcessor(0)
+		Processor::Processor () : m_voiceProcessor(0)
 		{
 			// register its editor class
 			setControllerClass (MyControllerUID);
-		
-			memset(&paramState, 0, sizeof(paramState));
-		
-			paramState.masterVolume = 0.5;
 		}
 
 		//-----------------------------------------------------------------------------
@@ -80,13 +74,13 @@ namespace Carlsound
 		//-----------------------------------------------------------------------------
 		Steinberg::tresult PLUGIN_API Processor::setState(Steinberg::IBStream* state)
 		{
-			return paramState.setState(state);
+			return m_globalParameterStorage.setState(state);
 		}
 
 		//------------------------------------------------------------------------
 		Steinberg::tresult PLUGIN_API Processor::getState(Steinberg::IBStream* state)
 		{
-			return paramState.getState(state);
+			return m_globalParameterStorage.getState(state);
 		}
 
 		//-----------------------------------------------------------------------------
@@ -106,28 +100,25 @@ namespace Carlsound
 			{
 				// Allocate Memory Here
 				// Ex: algo.create ();
-				if (paramState.noiseBuffer == 0)
-					paramState.noiseBuffer = new BrownNoise<float>((Steinberg::int32)processSetup.sampleRate, 
-				                                               (float)processSetup.sampleRate);
-				if (voiceProcessor == 0)
+				if (m_voiceProcessor == 0)
 				{
 					if (processSetup.symbolicSampleSize == Steinberg::Vst::kSample32)
 					{
-						voiceProcessor = new Steinberg::Vst::VoiceProcessorImplementation<float,
-						                                                                  Voice<float>, 
-						                                                                  2,
-						                                                                  MAX_VOICES,
-						                                                                  GlobalParameterState>((float)processSetup.sampleRate,
-																						  &paramState);
+						m_voiceProcessor = new Steinberg::Vst::VoiceProcessorImplementation<float, // precision
+						                                                                  Voice<float>, // voice class
+						                                                                  2, // numChannels
+						                                                                  MAX_VOICES, // maxVoices
+						                                                                  GlobalParameterStorage>((float)processSetup.sampleRate,
+																						                        &m_globalParameterStorage);
 					}
 					else if (processSetup.symbolicSampleSize == Steinberg::Vst::kSample64)
 					{
-						voiceProcessor = new Steinberg::Vst::VoiceProcessorImplementation<double, 
-						                                                                  Voice<double>, 
-						                                                                  2,
-						                                                                  MAX_VOICES, 
-						                                                                  GlobalParameterState>((float)processSetup.sampleRate, 
-																						  &paramState);
+						m_voiceProcessor = new Steinberg::Vst::VoiceProcessorImplementation<double, // precision
+						                                                                  Voice<double>, // voice class
+						                                                                  2, // numChannels
+						                                                                  MAX_VOICES, // maxVoices
+						                                                                  GlobalParameterStorage>((float)processSetup.sampleRate, 
+																						                        &m_globalParameterStorage);
 					}
 					else
 					{
@@ -139,16 +130,11 @@ namespace Carlsound
 			{
 				// Free Memory if still allocated
 				// Ex: if(algo.isCreated ()) { algo.destroy (); }
-				if (voiceProcessor)
+				if (m_voiceProcessor)
 				{
-					delete voiceProcessor;
+					delete m_voiceProcessor;
 				}
-				voiceProcessor = 0;
-				if (paramState.noiseBuffer)
-				{
-					delete paramState.noiseBuffer;
-				}
-				paramState.noiseBuffer = 0;
+				m_voiceProcessor = 0;
 			}
 			return AudioEffect::setActive (state);
 		}
@@ -184,9 +170,9 @@ namespace Carlsound
 						{
 							switch (pid)
 							{
-								case kParamMasterVolume:
+								case kParamNumHarmonicsId:
 								{
-									paramState.masterVolume = value;
+									//m_globalParameterStorage.masterVolume = value;
 									break;
 								}
 							}
@@ -201,19 +187,21 @@ namespace Carlsound
 			if (data.numOutputs < 1)
 				result = Steinberg::kResultTrue;
 			else
-				result = voiceProcessor->process(data);
+				result = m_voiceProcessor->process(data);
 			if (result == Steinberg::kResultTrue)
 			{
 				if (data.outputParameterChanges)
 				{
 					Steinberg::int32 index;
+					/*
 					Steinberg::Vst::IParamValueQueue* queue = data.outputParameterChanges->addParameterData(kParamActiveVoices, index);
 					if (queue)
 					{
-						queue->addPoint(0, (Steinberg::Vst::ParamValue)voiceProcessor->getActiveVoices() / (Steinberg::Vst::ParamValue)MAX_VOICES, index);
+						queue->addPoint(0, (Steinberg::Vst::ParamValue)m_voiceProcessor->getActiveVoices() / (Steinberg::Vst::ParamValue)MAX_VOICES, index);
 					}
+					*/
 				}
-				if (voiceProcessor->getActiveVoices() == 0 && data.numOutputs > 0)
+				if (m_voiceProcessor->getActiveVoices() == 0 && data.numOutputs > 0)
 				{
 					data.outputs[0].silenceFlags = 0x11; // left and right channel are silent
 				}

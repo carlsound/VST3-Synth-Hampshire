@@ -1,9 +1,9 @@
 #pragma once
 
-#include "globalParameterState.h"
-#include "noteExpressionSynthController.h"
-#include "noteExpressionSynthVoiceStatistics.h"
-#include "noteExpressionSynthVoiceStatisticsOnce.h"
+#include "hampshireGlobalParameterStorage.h"
+#include "hampshireController.h"
+#include "hampshireVoiceStatics.h"
+#include "hampshireVoiceStaticsOnce.h"
 #include "maximilian.h"
 
 #include "public.sdk/samples/vst/common/voicebase.h"
@@ -11,6 +11,8 @@
 
 #include "pluginterfaces/vst/ivstevents.h"
 #include "pluginterfaces/base/futils.h"
+
+#include "base/source/fstreamer.h"
 
 #include <cmath>
 #include <algorithm>
@@ -26,21 +28,9 @@ namespace Carlsound
 {
 	namespace Hampshire
 	{
-		
-		//#define MAX_VOICES				64
-		//#define MAX_RELEASE_TIME_SEC	5.0
-		//#define NUM_FILTER_TYPE			3
-		//#define NUM_TUNING_RANGE		2 
-
-		//-----------------------------------------------------------------------------
-		enum VoiceParameters
-		{
-			kVolumeMod
-		};
-		
 		//-----------------------------------------------------------------------------
 		template<class SamplePrecision>
-		class Voice : public Steinberg::Vst::VoiceBase<kNumParameters, SamplePrecision, 2, GlobalParameterState>
+		class Voice : public Steinberg::Vst::VoiceBase<kNumParameters, SamplePrecision, 2, GlobalParameterStorage>
 		{
 		public:
 			Voice ();

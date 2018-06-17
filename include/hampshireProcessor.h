@@ -6,9 +6,10 @@
 
 #include "public.sdk/source/vst/vstaudioeffect.h"
 
-#include "globalParameterState.h"
-#include "noteExpressionSynthController.h"
-#include "noteExpressionSynthVoice.h"
+#include "hampshireGlobalParameterStorage.h"
+//#include "hampshireController.h"
+#include "hampshireVoice.h"
+#include "hampshireIDs.h"
 
 #include "maximilian.h"
 #include <public.sdk/source/vst/vstparameters.h>
@@ -55,8 +56,8 @@ namespace Carlsound
 			
 			protected:
 			//-----------------------------------------------------------------------------
-			Steinberg::Vst::VoiceProcessor * voiceProcessor;
-			GlobalParameterState paramState;
+			Steinberg::Vst::VoiceProcessor* m_voiceProcessor;
+			GlobalParameterStorage m_globalParameterStorage;
 		};
 		
 		//------------------------------------------------------------------------

@@ -1,4 +1,5 @@
-#include "../include/noteExpressionSynthVoice.h"
+#include "../include/hampshireVoice.h"
+
 #include "base/source/fstreamer.h"
 
 namespace Carlsound

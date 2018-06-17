@@ -2,8 +2,10 @@
 
 #pragma once
 
-#include "../include/noteExpressionSynthIDs.h"
-#include "noteExpressionSynthVoice.h"
+#include "../include/hampshireIDs.h"
+#include "hampshireVoice.h"
+#include "hampshireGlobalParameterStorage.h"
+#include "hampshireVoiceStaticsOnce.h"
 
 #include "public.sdk/source/vst/vsteditcontroller.h"
 #include "pluginterfaces/vst/ivstnoteexpression.h"
@@ -16,19 +18,6 @@ namespace Carlsound
 {
 	namespace Hampshire
 	{
-		
-		//#define MAX_VOICES				64
-		//#define MAX_RELEASE_TIME_SEC	5.0
-		//#define NUM_FILTER_TYPE			3
-		//#define NUM_TUNING_RANGE		2 
-
-		//-----------------------------------------------------------------------------
-		enum
-		{
-			//kParamReleaseTime,
-			kNumGlobalParameters
-		};
-
 		//-----------------------------------------------------------------------------
 		class Controller : public Steinberg::Vst::EditController,
 	                       public Steinberg::Vst::INoteExpressionController,
@@ -54,19 +43,26 @@ namespace Carlsound
 				return (Steinberg::Vst::IEditController*) new Controller();
 			}
 			
-			///////////////////////////////////////////////////////////////////////////
-			//---from IPluginBase--------
-			Steinberg::tresult PLUGIN_API initialize (FUnknown* context) SMTG_OVERRIDE;
-			
 			////////////////////////////////////////////////////////////////////////////
-			//---from EditController-----
+			//---from CmponentBase (EditController)-----
+			Steinberg::tresult PLUGIN_API initialize(FUnknown* context) SMTG_OVERRIDE;
+
 			Steinberg::tresult PLUGIN_API terminate() SMTG_OVERRIDE;
-			
+
+			////////////////////////////////////////////////////////////////////////////
+			Steinberg::tresult PLUGIN_API setParamNormalizedFromFile(Steinberg::Vst::ParamID tag, Steinberg::Vst::ParamValue value);
+
+			////////////////////////////////////////////////////////////////////////////
+			//---from IEditController-----
 			Steinberg::tresult PLUGIN_API setComponentState (Steinberg::IBStream* state) SMTG_OVERRIDE;
-			
+
+			Steinberg::tresult PLUGIN_API setState(Steinberg::IBStream* state) SMTG_OVERRIDE;
+			Steinberg::tresult PLUGIN_API getState(Steinberg::IBStream* state) SMTG_OVERRIDE;
+
 			Steinberg::tresult PLUGIN_API setParamNormalized(Steinberg::Vst::ParamID tag,
 		                                                     Steinberg::Vst::ParamValue value) SMTG_OVERRIDE;
 
+			
 			/*
 			Steinberg::Vst::ParamValue PLUGIN_API normalizedParamToPlain(Steinberg::Vst::ParamID tag,
 		                                                                 Steinberg::Vst::ParamValue valueNormalized) SMTG_OVERRIDE;
@@ -107,16 +103,16 @@ namespace Carlsound
 
 			////////////////////////////////////////////////////////////////////////////////
 			//---member variables----
+			/*
 			enum NoteExpressionTypeIds
 			{
-					//kNoiseVolumeTypeID = Steinberg::Vst::NoteExpressionTypeIDs::kCustomStart,
+					kNoiseVolumeTypeID = Steinberg::Vst::NoteExpressionTypeIDs::kCustomStart,
 			};
+			*/
 
 			////////////////////////////////////////////////////////////////////////////////
 			protected:
-			Steinberg::Vst::NoteExpressionTypeContainer noteExpressionTypes;
-
-			//std::shared_ptr<Steinberg::Vst::RangeParameter> m_speedRangeParameter;
+			Steinberg::Vst::NoteExpressionTypeContainer m_noteExpressionTypes;
 		};
 
 		//------------------------------------------------------------------------

@@ -1,24 +1,28 @@
 
 set(synth_sources
-    include/noteExpressionSynthController.h
-    source/noteExpressionSynthController.cpp
+    include/hampshireController.h
+    source/hampshireController.cpp
     #---
-    include/noteExpressionSynthIDs.h
+    include/hampshireIDs.h
     #---
-    include/noteExpressionSynthProcessor.h
-    source/noteExpressionSynthProcessor.cpp
+    include/hampshireProcessor.h
+    source/hampshireProcessor.cpp
     #---
     include/version.h
     #---
-    source/noteExpressionSynthFactory.cpp
+    source/hampshireFactory.cpp
     #---
-    include/noteExpressionSynthVoice.h
-    source/noteExpressionSynthVoice.cpp
+    include/hampshireGlobalParameterStorage.h
+    source/hampshireGlobalParameterStorage.cpp
+    #--
+    include/hampshireVoice.h
+    source/hampshireVoice.cpp
     #---
-    include/noteExpressionSynthVoiceStatistics.h
-    source/noteExpressionSynthVoiceStatistics.cpp
+    include/hampshireVoiceStatics.h
+    source/hampshireVoiceStatics.cpp
     #---
-    include/noteExpressionSynthVoiceStatisticsOnce.h
+    include/hampshireVoiceStaticsOnce.h
+    source/hampshireVoiceStaticsOnce.cpp
     #---
     #---include/panNoteExpressionType.h
     #---
