@@ -13,7 +13,7 @@ namespace Carlsound
 				                              (normalized - 0.5f) * 24 / 20.0f);
 			else
 				level = scaleNorm2GainC1 * ::pow(normalized, 
-					                             Steinberg::Vst::NoteExpressionSynth::VoiceStatics::scaleNorm2GainC2);
+					                             scaleNorm2GainC2);
 
 			return level;
 		}

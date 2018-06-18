@@ -24,6 +24,7 @@ namespace Carlsound
 		//
 		const float scaleHeadRoom = (float)(pow(10.0, -12.0 / 20.0) * 0.70710677); // for 12 dB head room
 		const float scaleNorm2GainC1 = (float)(scaleHeadRoom * pow(10.0, 24.0 / 20.0));
+        const float scaleNorm2GainC2 = (float)(24.0 / 20.0 / 0.30102999566398119521373889472449); // Mathd::kLog2
 		/*
 		extern float freqTab[];
 		extern const float scaleHeadRoom; // for 12 dB head room

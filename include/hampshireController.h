@@ -11,7 +11,11 @@
 #include "pluginterfaces/vst/ivstnoteexpression.h"
 #include "public.sdk/source/vst/vstnoteexpressiontypes.h"
 #include <memory>
+
+#if SMTG_OS_WINDOWS
 #include <atlconv.h>
+#endif
+
 #include <codecvt>
 
 namespace Carlsound
