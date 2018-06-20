@@ -30,20 +30,178 @@ namespace Carlsound
 	{
 		//-----------------------------------------------------------------------------
 		template<class SamplePrecision>
-		class Voice : public Steinberg::Vst::VoiceBase<kNumParameters, SamplePrecision, 2, GlobalParameterStorage>
+		class Voice : public Steinberg::Vst::VoiceBase<kNumParameters, 
+			                                           SamplePrecision,
+			                                           2, 
+			                                           GlobalParameterStorage>
 		{
 		public:
-			Voice ();
-			~Voice ();
-		
-			void setSampleRate (Steinberg::Vst::ParamValue sampleRate) SMTG_OVERRIDE;
-			void noteOn (Steinberg::int32 pitch, Steinberg::Vst::ParamValue velocity, float tuning, Steinberg::int32 sampleOffset, Steinberg::int32 nId) SMTG_OVERRIDE;
-			void noteOff (Steinberg::Vst::ParamValue velocity, Steinberg::int32 sampleOffset) SMTG_OVERRIDE;
-			bool process (SamplePrecision* outputBuffers[2], Steinberg::int32 numSamples);
-			void reset () SMTG_OVERRIDE;
-			void setNoteExpressionValue (Steinberg::int32 index, Steinberg::Vst::ParamValue value) SMTG_OVERRIDE;
+			//-----------------------------------------------------------------------------
+			Voice ()
+			{
+				//filter = new Filter (Filter::kLowpass);
+			}
+
+			//-----------------------------------------------------------------------------
+			~Voice ()
+			{
+				//delete filter;
+			}
+			
+			//-----------------------------------------------------------------------------
+			void setSampleRate (Steinberg::Vst::ParamValue sampleRate) SMTG_OVERRIDE
+			{
+				//filter->setSampleRate (sampleRate);
+				Steinberg::Vst::VoiceBase<kNumParameters,
+					SamplePrecision,
+					2, GlobalParameterStorage>::setSampleRate(sampleRate);
+				//
+				m_oscillatorSettings->sampleRate = sampleRate;
+			}
+
+			//-----------------------------------------------------------------------------
+			void noteOn (Steinberg::int32 pitch, 
+				         Steinberg::Vst::ParamValue velocity, 
+				         float tuning, Steinberg::int32 sampleOffset, 
+				         Steinberg::int32 nId) SMTG_OVERRIDE
+			{
+				currentVolume = 0;
+				//this->values[kVolumeMod] = 0;
+				//levelFromVel = 1.f + this->globalParameters->velToLevel * (velocity - 1.);
+
+				//currentSinusVolume = this->values[kSinusVolume] = this->globalParameters->sinusVolume;
+
+				/*
+				Steinberg::Vst::VoiceBase<kNumParameters,
+					                      SamplePrecision, 
+					                      2, 
+					                      GlobalParameterStorage>::noteOn(_pitch, 
+											                              velocity, 
+											                              tuning, 
+											                              sampleOffset, 
+											                              nId);
+				*/
+				this->noteOnSampleOffset++;
+			}
+
+			//-----------------------------------------------------------------------------
+			void noteOff (Steinberg::Vst::ParamValue velocity, 
+				          Steinberg::int32 sampleOffset) SMTG_OVERRIDE
+			{
+				Steinberg::Vst::VoiceBase<kNumParameters, 
+					                      SamplePrecision, 
+					                      2, 
+					                      GlobalParameterStorage>::noteOff(velocity, 
+											                               sampleOffset);
+				this->noteOffSampleOffset++;
+
+				/*
+				Steinberg::Vst::ParamValue timeFactor = ::pow (100., 
+				                                                 this->values[kReleaseTimeMod]);
+				*/
+
+				//noteOffVolumeRamp = 1.0 / (timeFactor * this->sampleRate * ((this->globalParameters->releaseTime * MAX_RELEASE_TIME_SEC) + 0.005));
+				if (currentVolume)
+					noteOffVolumeRamp *= currentVolume;
+			}
+			
+			//-----------------------------------------------------------------------------
+			bool process(SamplePrecision* outputBuffers[2],
+				Steinberg::int32 numSamples)
+			{
+				for (Steinberg::int32 i = 0; i < numSamples; i++)
+				{
+					this->noteOnSampleOffset--;
+					this->noteOffSampleOffset--;
+
+					if (this->noteOnSampleOffset <= 0)
+					{
+						// we are in Release
+						if (this->noteOffSampleOffset == 0)
+						{
+							//volumeRamp = 0;
+							if (currentVolume > 0)
+							{
+								// ramp note off
+								currentVolume -= noteOffVolumeRamp;
+								if (currentVolume < 0.)
+									currentVolume = 0.;
+								this->noteOffSampleOffset++;
+							}
+							else
+							{
+								this->noteOffSampleOffset = this->noteOnSampleOffset = -1;
+								return false;
+							}
+						}
+						SamplePrecision sample;
+						//SamplePrecision osc = (SamplePrecision)sin(n * triangleFreq + trianglePhase);
+						//sample += (SamplePrecision)(sin(n * sinusFreq + sinusPhase) * currentSinusVolume);
+
+						n++;
+
+						// store in output
+						//outputBuffers[0][i] += (SamplePrecision)(sample * currentPanningLeft * currentVolume);
+						//outputBuffers[1][i] += (SamplePrecision)(sample * currentPanningRight * currentVolume);
+
+						// ramp parameters
+						//currentVolume += volumeRamp;
+					}
+				}
+				return true;
+			}
+
+			//-----------------------------------------------------------------------------
+			void reset () SMTG_OVERRIDE
+			{
+				noiseStep = 1;
+				noisePos = 0;
+				n = 0;
+				//sinusPhase = trianglePhase = 0.;
+				//currentSinusF = currentTriangleF = -1.;
+				//this->values[kVolumeMod] = 0.;
+
+				noteOffVolumeRamp = 0.005;
+
+				Steinberg::Vst::VoiceBase<kNumParameters, 
+					                      SamplePrecision, 
+					                      2, 
+					                      GlobalParameterStorage>::reset();
+			}
+
+			//-----------------------------------------------------------------------------
+			void setNoteExpressionValue (Steinberg::int32 index, 
+				                         Steinberg::Vst::ParamValue value) SMTG_OVERRIDE
+			{
+				/*
+				if (this->globalParameters->bypassSNA)
+					return;
+				*/
+
+				switch (index)
+				{
+					//------------------------------
+					case Steinberg::Vst::kVolumeTypeID:
+					{
+						//Steinberg::Vst::ParamValue vol = VoiceStatics::normalizedLevel2Gain ((float)value);
+						//Steinberg::Vst::VoiceBase<kNumParameters, SamplePrecision, 2, GlobalParameterState>::setNoteExpressionValue (kVolumeMod, vol);
+						break;
+					}
+					//------------------------------
+					default:
+					{
+						Steinberg::Vst::VoiceBase<kNumParameters,
+							                      SamplePrecision,
+							                      2,
+							                      GlobalParameterStorage>::setNoteExpressionValue(index,
+								                  value);
+						break;
+					}
+				}
+			}
 		
 		protected:
+			//-----------------------------------------------------------------------------
 			Steinberg::uint32 n;
 			Steinberg::int32 noisePos;
 			Steinberg::int32 noiseStep;
