@@ -54,6 +54,11 @@ namespace Carlsound
 				0, // unitID
 				STR16("Speed")); // shortTitle
 			*/
+			//
+			// m_voiceProcessor
+			//
+			//m_globalParameterStorage
+			//
 			return Steinberg::kResultTrue;
 		}
 

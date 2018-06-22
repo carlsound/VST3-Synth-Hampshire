@@ -14,6 +14,7 @@
 #include "maximilian.h"
 #include <public.sdk/source/vst/vstparameters.h>
 #include <public.sdk/samples/vst/common/voiceprocessor.h>
+#include <pluginterfaces/base/smartpointer.h>
 
 namespace Carlsound
 {
@@ -56,8 +57,8 @@ namespace Carlsound
 			
 			protected:
 			//-----------------------------------------------------------------------------
-			Steinberg::Vst::VoiceProcessor* m_voiceProcessor;
-			GlobalParameterStorage m_globalParameterStorage;
+		    Steinberg::IPtr<Steinberg::Vst::VoiceProcessor> m_voiceProcessor;
+			Steinberg::IPtr<GlobalParameterStorage> m_globalParameterStorage;
 		};
 		
 		//------------------------------------------------------------------------
