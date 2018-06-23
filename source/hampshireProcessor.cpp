@@ -18,24 +18,44 @@ namespace Carlsound
 	{
 
 		//-----------------------------------------------------------------------------
-		Processor::Processor () : m_voiceProcessor(0)
+		Processor::Processor () : m_voiceProcessor
+		(
+			0
+		)
 		{
 			// register its editor class
-			setControllerClass (MyControllerUID);
+			setControllerClass
+			(
+				MyControllerUID
+			);
 		}
 
 		//-----------------------------------------------------------------------------
-		Steinberg::tresult PLUGIN_API Processor::initialize (FUnknown* context)
+		Steinberg::tresult PLUGIN_API Processor::initialize 
+		(
+			FUnknown* context
+		)
 		{
 			//---always initialize the parent-------
-			Steinberg::tresult result = AudioEffect::initialize (context);
+			Steinberg::tresult result = AudioEffect::initialize 
+			(
+				context
+			);
 			if (result != Steinberg::kResultTrue)
 				return Steinberg::kResultFalse;
 		
 			//---create Audio Out bus------
-			addAudioOutput (STR16 ("AudioOutput"), Steinberg::Vst::SpeakerArr::kStereo);
+			addAudioOutput
+			(
+				STR16 ("AudioOutput"), 
+				Steinberg::Vst::SpeakerArr::kStereo
+			);
 			//
-			addEventInput(STR16("Event Input"), 1);
+			addEventInput
+			(
+				STR16("Event Input"), 
+				1
+			);
 			//
 			/*
 			m_oscillator[0] = std::make_shared<maxiOsc>();
@@ -43,7 +63,12 @@ namespace Carlsound
 			//
 			m_oscillatorSettings = std::make_shared<maxiSettings>();
 			//
-			m_speedRangeParameter = std::make_shared<Steinberg::Vst::RangeParameter>(STR16("Speed"), // title
+			m_speedRangeParameter = std::make_shared
+			<
+				Steinberg::Vst::RangeParameter
+			>
+			(
+				STR16("Speed"), // title
 				HuntleyParams::kParamSpeedId, // ParamID
 				STR16("sec"), // units
 				0.1, // minPlain
@@ -52,46 +77,81 @@ namespace Carlsound
 				99, // stepCount
 				Steinberg::Vst::ParameterInfo::kCanAutomate, // flags
 				0, // unitID
-				STR16("Speed")); // shortTitle
+				STR16("Speed") // shortTitle
+			);
 			*/
 			//
-			// m_voiceProcessor
+			m_voiceProcessor = 0;
 			//
-			//m_globalParameterStorage
+			m_globalParameterStorage = std::make_shared
+			<
+				GlobalParameterStorage
+			>
+			();
 			//
 			return Steinberg::kResultTrue;
 		}
 
 		//-----------------------------------------------------------------------------
-		Steinberg::tresult PLUGIN_API Processor::setBusArrangements (Steinberg::Vst::SpeakerArrangement* inputs,
-                                                                     Steinberg::int32 numIns,
-                                                                     Steinberg::Vst::SpeakerArrangement* outputs,
-                                                                     Steinberg::int32 numOuts)
+		Steinberg::tresult PLUGIN_API Processor::setBusArrangements
+		(
+			Steinberg::Vst::SpeakerArrangement* inputs,
+            Steinberg::int32 numIns,
+            Steinberg::Vst::SpeakerArrangement* outputs,
+            Steinberg::int32 numOuts
+		)
 		{
 			// we only support one stereo output bus
-			if (numIns == 0 && numOuts == 1 && outputs[0] == Steinberg::Vst::SpeakerArr::kStereo)
+			if (numIns == 0 
+				&& 
+				numOuts == 1 
+				&& 
+				outputs[0] == Steinberg::Vst::SpeakerArr::kStereo)
 			{
-				return AudioEffect::setBusArrangements(inputs, numIns, outputs, numOuts);
+				return AudioEffect::setBusArrangements
+				(
+					inputs, 
+					numIns, 
+					outputs, 
+					numOuts
+				);
 			}
 			return Steinberg::kResultFalse;
 		}
 
 		//-----------------------------------------------------------------------------
-		Steinberg::tresult PLUGIN_API Processor::setState(Steinberg::IBStream* state)
+		Steinberg::tresult PLUGIN_API Processor::setState
+		(
+			Steinberg::IBStream* state
+		)
 		{
-			return m_globalParameterStorage.setState(state);
+			return m_globalParameterStorage->setState
+			(
+				state
+			);
 		}
 
 		//------------------------------------------------------------------------
-		Steinberg::tresult PLUGIN_API Processor::getState(Steinberg::IBStream* state)
+		Steinberg::tresult PLUGIN_API Processor::getState
+		(
+			Steinberg::IBStream* state
+		)
 		{
-			return m_globalParameterStorage.getState(state);
+			return m_globalParameterStorage->getState
+			(
+				state
+			);
 		}
 
 		//-----------------------------------------------------------------------------
-		Steinberg::tresult PLUGIN_API Processor::canProcessSampleSize(Steinberg::int32 symbolicSampleSize)
+		Steinberg::tresult PLUGIN_API Processor::canProcessSampleSize
+		(
+			Steinberg::int32 symbolicSampleSize
+		)
 		{
-			if (symbolicSampleSize == Steinberg::Vst::kSample32 || symbolicSampleSize == Steinberg::Vst::kSample64)
+			if (symbolicSampleSize == Steinberg::Vst::kSample32 
+				|| 
+				symbolicSampleSize == Steinberg::Vst::kSample64)
 			{
 				return Steinberg::kResultTrue;
 			}
@@ -99,7 +159,10 @@ namespace Carlsound
 		}
 
 		//-----------------------------------------------------------------------------
-		Steinberg::tresult PLUGIN_API Processor::setActive (Steinberg::TBool state)
+		Steinberg::tresult PLUGIN_API Processor::setActive
+		(
+			Steinberg::TBool state
+		)
 		{
 			if (state) // Initialize
 			{
@@ -109,21 +172,32 @@ namespace Carlsound
 				{
 					if (processSetup.symbolicSampleSize == Steinberg::Vst::kSample32)
 					{
-						m_voiceProcessor = new Steinberg::Vst::VoiceProcessorImplementation<float, // precision
-						                                                                  Voice<float>, // voice class
-						                                                                  2, // numChannels
-						                                                                  MAX_VOICES, // maxVoices
-						                                                                  GlobalParameterStorage>((float)processSetup.sampleRate,
-																						                        &m_globalParameterStorage);
+						m_voiceProcessor = std::make_shared<
+							Steinberg::Vst::VoiceProcessorImplementation<
+								float, // precision
+						        Voice<float>, // voice class
+						        2, // numChannels
+						        MAX_VOICES, // maxVoices
+						        GlobalParameterStorage>
+						        >(
+									(float)processSetup.sampleRate,
+									&m_globalParameterStorage
+								  );
 					}
 					else if (processSetup.symbolicSampleSize == Steinberg::Vst::kSample64)
 					{
-						m_voiceProcessor = new Steinberg::Vst::VoiceProcessorImplementation<double, // precision
-						                                                                  Voice<double>, // voice class
-						                                                                  2, // numChannels
-						                                                                  MAX_VOICES, // maxVoices
-						                                                                  GlobalParameterStorage>((float)processSetup.sampleRate, 
-																						                        &m_globalParameterStorage);
+						m_voiceProcessor = std::make_shared<
+							Steinberg::Vst::VoiceProcessorImplementation<
+								double, // precision
+								Voice<double>, // voice class
+								2, // numChannels
+								MAX_VOICES, // maxVoices
+								GlobalParameterStorage
+							    >
+						        >(
+									(float)processSetup.sampleRate, 
+									&m_globalParameterStorage
+								  );
 					}
 					else
 					{
@@ -135,11 +209,6 @@ namespace Carlsound
 			{
 				// Free Memory if still allocated
 				// Ex: if(algo.isCreated ()) { algo.destroy (); }
-				if (m_voiceProcessor)
-				{
-					delete m_voiceProcessor;
-				}
-				m_voiceProcessor = 0;
 			}
 			return AudioEffect::setActive (state);
 		}
@@ -147,7 +216,13 @@ namespace Carlsound
 		//-----------------------------------------------------------------------------
 		/*
 		template<class T>
-		inline void Carlsound::Huntley::Processor::bufferSampleGain(T inBuffer, T outBuffer, const int sampleLocation, const double gainValue)
+		inline void Carlsound::Huntley::Processor::bufferSampleGain
+		(
+			T inBuffer, 
+		    T outBuffer, 
+			const int sampleLocation, 
+			const double gainValue
+		)
 		{
 			inBuffer = inBuffer + sampleLocation;  // pointer arithmetic
 			outBuffer = outBuffer + sampleLocation; // pointer arithmetic
@@ -157,7 +232,10 @@ namespace Carlsound
 		*/
 		
 		//-----------------------------------------------------------------------------
-		Steinberg::tresult PLUGIN_API Processor::process(Steinberg::Vst::ProcessData& data)
+		Steinberg::tresult PLUGIN_API Processor::process
+		(
+			Steinberg::Vst::ProcessData& data
+		)
 		{
 			//--- Read inputs parameter changes-----------
 			if (data.inputParameterChanges)
@@ -171,13 +249,19 @@ namespace Carlsound
 						Steinberg::int32 sampleOffset;
 						Steinberg::Vst::ParamValue value;
 						Steinberg::Vst::ParamID pid = queue->getParameterId();
-						if (queue->getPoint(queue->getPointCount() - 1, sampleOffset, value) == Steinberg::kResultTrue)
+						if (queue->getPoint(
+								queue->getPointCount() - 1, 
+							    sampleOffset, 
+							    value) 
+							== 
+							Steinberg::kResultTrue
+							)
 						{
 							switch (pid)
 							{
 								case kParamNumHarmonicsId:
 								{
-									//m_globalParameterStorage.masterVolume = value;
+									//m_globalParameterStorage->masterVolume = value;
 									break;
 								}
 							}
@@ -199,14 +283,22 @@ namespace Carlsound
 				{
 					Steinberg::int32 index;
 					/*
-					Steinberg::Vst::IParamValueQueue* queue = data.outputParameterChanges->addParameterData(kParamActiveVoices, index);
+					Steinberg::Vst::IParamValueQueue* queue = data.outputParameterChanges->addParameterData(
+						kParamActiveVoices, 
+						index
+						);
 					if (queue)
 					{
-						queue->addPoint(0, (Steinberg::Vst::ParamValue)m_voiceProcessor->getActiveVoices() / (Steinberg::Vst::ParamValue)MAX_VOICES, index);
+						queue->addPoint(
+							0, 
+							(Steinberg::Vst::ParamValue)m_voiceProcessor->getActiveVoices() / (Steinberg::Vst::ParamValue)MAX_VOICES, 
+							index);
 					}
 					*/
 				}
-				if (m_voiceProcessor->getActiveVoices() == 0 && data.numOutputs > 0)
+				if (m_voiceProcessor->getActiveVoices() == 0 
+					&& 
+					data.numOutputs > 0)
 				{
 					data.outputs[0].silenceFlags = 0x11; // left and right channel are silent
 				}

@@ -41,29 +41,42 @@ namespace Carlsound
 			{
 				//filter = new Filter (Filter::kLowpass);
 			}
-
+			//
 			//-----------------------------------------------------------------------------
 			~Voice ()
 			{
 				//delete filter;
 			}
-			
+			//
 			//-----------------------------------------------------------------------------
-			void setSampleRate (Steinberg::Vst::ParamValue sampleRate) SMTG_OVERRIDE
+			void setSampleRate
+			(
+				Steinberg::Vst::ParamValue sampleRate
+			) 
+				SMTG_OVERRIDE
 			{
 				//filter->setSampleRate (sampleRate);
-				Steinberg::Vst::VoiceBase<kNumParameters,
+				Steinberg::Vst::VoiceBase
+				<
+					kNumParameters,
 					SamplePrecision,
-					2, GlobalParameterStorage>::setSampleRate(sampleRate);
+					2,
+					GlobalParameterStorage
+				>::setSampleRate(sampleRate);
 				//
 				m_oscillatorSettings->sampleRate = sampleRate;
 			}
-
+			//
 			//-----------------------------------------------------------------------------
-			void noteOn (Steinberg::int32 pitch, 
-				         Steinberg::Vst::ParamValue velocity, 
-				         float tuning, Steinberg::int32 sampleOffset, 
-				         Steinberg::int32 nId) SMTG_OVERRIDE
+			void noteOn 
+			(
+				Steinberg::int32 pitch, 
+				Steinberg::Vst::ParamValue velocity, 
+				float tuning, 
+				Steinberg::int32 sampleOffset, 
+				Steinberg::int32 nId
+			) 
+				SMTG_OVERRIDE
 			{
 				currentVolume = 0;
 				//this->values[kVolumeMod] = 0;
@@ -72,42 +85,64 @@ namespace Carlsound
 				//currentSinusVolume = this->values[kSinusVolume] = this->globalParameters->sinusVolume;
 
 				/*
-				Steinberg::Vst::VoiceBase<kNumParameters,
-					                      SamplePrecision, 
-					                      2, 
-					                      GlobalParameterStorage>::noteOn(_pitch, 
-											                              velocity, 
-											                              tuning, 
-											                              sampleOffset, 
-											                              nId);
+				Steinberg::Vst::VoiceBase
+				<
+					kNumParameters,
+					SamplePrecision, 
+					2, 
+					GlobalParameterStorage
+				>::noteOn
+				(
+					_pitch, 
+					velocity, 
+					tuning, 
+					sampleOffset, 
+					nId
+				);
 				*/
 				this->noteOnSampleOffset++;
 			}
-
+			//
 			//-----------------------------------------------------------------------------
-			void noteOff (Steinberg::Vst::ParamValue velocity, 
-				          Steinberg::int32 sampleOffset) SMTG_OVERRIDE
+			void noteOff 
+			(
+				Steinberg::Vst::ParamValue velocity, 
+				Steinberg::int32 sampleOffset
+			) 
+				SMTG_OVERRIDE
 			{
-				Steinberg::Vst::VoiceBase<kNumParameters, 
-					                      SamplePrecision, 
-					                      2, 
-					                      GlobalParameterStorage>::noteOff(velocity, 
-											                               sampleOffset);
+				Steinberg::Vst::VoiceBase
+				<
+					kNumParameters, 
+					 SamplePrecision, 
+					 2, 
+					 GlobalParameterStorage
+				>::noteOff
+				(
+					velocity, 
+					sampleOffset
+				);
 				this->noteOffSampleOffset++;
 
 				/*
-				Steinberg::Vst::ParamValue timeFactor = ::pow (100., 
-				                                                 this->values[kReleaseTimeMod]);
+				Steinberg::Vst::ParamValue timeFactor = ::pow
+				(
+					100., 
+				    this->values[kReleaseTimeMod]
+				);
 				*/
 
 				//noteOffVolumeRamp = 1.0 / (timeFactor * this->sampleRate * ((this->globalParameters->releaseTime * MAX_RELEASE_TIME_SEC) + 0.005));
 				if (currentVolume)
 					noteOffVolumeRamp *= currentVolume;
 			}
-			
+			//
 			//-----------------------------------------------------------------------------
-			bool process(SamplePrecision* outputBuffers[2],
-				Steinberg::int32 numSamples)
+			bool process
+			(
+				SamplePrecision* outputBuffers[2],
+				Steinberg::int32 numSamples
+			)
 			{
 				for (Steinberg::int32 i = 0; i < numSamples; i++)
 				{
@@ -150,9 +185,11 @@ namespace Carlsound
 				}
 				return true;
 			}
-
+			//
 			//-----------------------------------------------------------------------------
-			void reset () SMTG_OVERRIDE
+			void reset 
+			() 
+				SMTG_OVERRIDE
 			{
 				noiseStep = 1;
 				noisePos = 0;
@@ -163,15 +200,22 @@ namespace Carlsound
 
 				noteOffVolumeRamp = 0.005;
 
-				Steinberg::Vst::VoiceBase<kNumParameters, 
-					                      SamplePrecision, 
-					                      2, 
-					                      GlobalParameterStorage>::reset();
+				Steinberg::Vst::VoiceBase
+				<
+					kNumParameters, 
+					SamplePrecision, 
+					2, 
+					GlobalParameterStorage
+				>::reset();
 			}
-
+			//
 			//-----------------------------------------------------------------------------
-			void setNoteExpressionValue (Steinberg::int32 index, 
-				                         Steinberg::Vst::ParamValue value) SMTG_OVERRIDE
+			void setNoteExpressionValue 
+			(
+				Steinberg::int32 index, 
+				Steinberg::Vst::ParamValue value
+			) 
+				SMTG_OVERRIDE
 			{
 				/*
 				if (this->globalParameters->bypassSNA)
@@ -190,27 +234,33 @@ namespace Carlsound
 					//------------------------------
 					default:
 					{
-						Steinberg::Vst::VoiceBase<kNumParameters,
-							                      SamplePrecision,
-							                      2,
-							                      GlobalParameterStorage>::setNoteExpressionValue(index,
-								                  value);
+						Steinberg::Vst::VoiceBase
+						<
+							kNumParameters,
+							SamplePrecision,
+							2,
+							GlobalParameterStorage
+						>::setNoteExpressionValue
+						(
+							index,
+							value
+						);
 						break;
 					}
 				}
 			}
-		
+			//
 		protected:
 			//-----------------------------------------------------------------------------
 			Steinberg::uint32 n;
 			Steinberg::int32 noisePos;
 			Steinberg::int32 noiseStep;
-		
+			//
 			Steinberg::Vst::ParamValue currentVolume;
-		
+			//
 			Steinberg::Vst::ParamValue levelFromVel;
 			Steinberg::Vst::ParamValue noteOffVolumeRamp;
-
+			//
 			std::shared_ptr<maxiOsc> m_oscillator;
 			std::shared_ptr<maxiSettings> m_oscillatorSettings;
 		};

@@ -11,14 +11,15 @@ namespace Carlsound
 	namespace Hampshire
 	{
 		//---global variables----
-		enum {
+		enum
+		{
 			kNumFrequencies = 128
 		};
 		//
 		enum VoiceParameters
 		{
 			kParamNumHarmonicsId,
-
+			//
 			kNumParameters
 		};
 		//
@@ -42,7 +43,7 @@ namespace Carlsound
 		public:
 			VoiceStaticsOnce();
 		};
-
+		//
 		//-----------------------------------------------------------------------------
 		static VoiceStaticsOnce gVoiceStaticsOnce;
 	} // namespace Hampshire

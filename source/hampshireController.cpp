@@ -87,11 +87,17 @@ namespace Carlsound
 		
 		//------------------------------------------------------------------------
 
-		Steinberg::tresult PLUGIN_API Controller::setParamNormalizedFromFile(Steinberg::Vst::ParamID tag, 
-			                                                                 Steinberg::Vst::ParamValue value)
+		Steinberg::tresult PLUGIN_API Controller::setParamNormalizedFromFile
+		(
+			Steinberg::Vst::ParamID tag, 
+			Steinberg::Vst::ParamValue value
+		)
 		{
 			// --- get the parameter
-			Steinberg::Vst::Parameter* pParam = Steinberg::Vst::EditController::getParameterObject(tag);
+			Steinberg::Vst::Parameter* pParam = Steinberg::Vst::EditController::getParameterObject
+			(
+				tag
+			);
 
 			// --- verify pointer
 			if (!pParam) return Steinberg::kResultFalse;
@@ -101,9 +107,16 @@ namespace Carlsound
 		}
 
 		//------------------------------------------------------------------------
-		Steinberg::tresult PLUGIN_API Controller::setState(Steinberg::IBStream* state)
+		Steinberg::tresult PLUGIN_API Controller::setState
+		(
+			Steinberg::IBStream* state
+		)
 		{
-			Steinberg::IBStreamer streamer(state, kLittleEndian);
+			Steinberg::IBStreamer streamer
+			(
+				state, 
+				kLittleEndian
+			);
 
 			Steinberg::uint64 version = 0;
 			double dDoubleParam = 0;
@@ -121,7 +134,11 @@ namespace Carlsound
 			}
 			else
 			{
-				setParamNormalizedFromFile(kParamNumHarmonicsId, dDoubleParam);
+				setParamNormalizedFromFile
+				(
+					kParamNumHarmonicsId, 
+					dDoubleParam
+				);
 			}
 			//
 			//
@@ -136,26 +153,43 @@ namespace Carlsound
 		
 		//------------------------------------------------------------------------
 		
-		Steinberg::tresult PLUGIN_API Controller::getState(Steinberg::IBStream* state)
+		Steinberg::tresult PLUGIN_API Controller::getState
+		(
+			Steinberg::IBStream* state
+		)
 		{
-			Steinberg::IBStreamer streamer(state, kLittleEndian);
-
+			Steinberg::IBStreamer streamer
+			(
+				state, 
+				kLittleEndian
+			);
+			//
 			return Steinberg::kResultTrue;
 		}
 				
 		//------------------------------------------------------------------------
-		Steinberg::tresult PLUGIN_API Controller::setParamNormalized(Steinberg::Vst::ParamID tag,
-																	 Steinberg::Vst::ParamValue value)
+		Steinberg::tresult PLUGIN_API Controller::setParamNormalized
+		(
+			Steinberg::Vst::ParamID tag,
+			Steinberg::Vst::ParamValue value
+		)
 		{
-			Steinberg::tresult res = Steinberg::Vst::EditController::setParamNormalized(tag, value);
-			
+			Steinberg::tresult res = Steinberg::Vst::EditController::setParamNormalized
+			(
+				tag, 
+				value
+			);
+			//
 			return res;
 		}
-		
+		//
 		//------------------------------------------------------------------------
 		/*
-		Steinberg::Vst::ParamValue PLUGIN_API Controller::normalizedParamToPlain(Steinberg::Vst::ParamID tag,
-				                                                                 Steinberg::Vst::ParamValue valueNormalized)
+		Steinberg::Vst::ParamValue PLUGIN_API Controller::normalizedParamToPlain
+		(
+			Steinberg::Vst::ParamID tag,
+			Steinberg::Vst::ParamValue valueNormalized
+		)
 		{
 			if(kParamSpeedId == tag)
 			{
@@ -167,11 +201,14 @@ namespace Carlsound
 			}
 		}
 		*/
-		
+		//
 		//------------------------------------------------------------------------
 		/*
-		Steinberg::Vst::ParamValue PLUGIN_API Controller::plainParamToNormalized(Steinberg::Vst::ParamID tag,
-																			     Steinberg::Vst::ParamValue value)
+		Steinberg::Vst::ParamValue PLUGIN_API Controller::plainParamToNormalized
+		(
+			Steinberg::Vst::ParamID tag,
+			Steinberg::Vst::ParamValue value
+		)
 		{
 			if (kParamSpeedId == tag)
 			{
@@ -183,12 +220,15 @@ namespace Carlsound
 			}
 		}
 		*/
-		
+		//
 		//------------------------------------------------------------------------
 		/*
-		Steinberg::tresult Controller::getParamStringByValue(Steinberg::Vst::ParamID tag,
-															 Steinberg::Vst::ParamValue valueNormalized,
-															 Steinberg::Vst::String128 string)
+		Steinberg::tresult Controller::getParamStringByValue
+		(
+			Steinberg::Vst::ParamID tag,
+			Steinberg::Vst::ParamValue valueNormalized,
+			Steinberg::Vst::String128 string
+		)
 		{
 			
 			if(HuntleyParams::kBypassId == tag)
@@ -217,10 +257,13 @@ namespace Carlsound
 			return Steinberg::kResultOk;
 		}
 		*/
-		
+		//
 		//------------------------------------------------------------------------
-		Steinberg::int32 PLUGIN_API Controller::getNoteExpressionCount(Steinberg::int32 busIndex,
-			                                                           Steinberg::int16 channel)
+		Steinberg::int32 PLUGIN_API Controller::getNoteExpressionCount
+		(
+			Steinberg::int32 busIndex,
+			Steinberg::int16 channel
+		)
 		{
 			if (busIndex == 0 && channel == 0)
 			{
@@ -230,54 +273,88 @@ namespace Carlsound
 		}
 		
 		//------------------------------------------------------------------------
-		Steinberg::tresult PLUGIN_API Controller::getNoteExpressionInfo(Steinberg::int32 busIndex,
-																		Steinberg::int16 channel,
-																		Steinberg::int32 noteExpressionIndex,
-																		Steinberg::Vst::NoteExpressionTypeInfo& info /*out*/)
+		Steinberg::tresult PLUGIN_API Controller::getNoteExpressionInfo
+		(
+			Steinberg::int32 busIndex,
+			Steinberg::int16 channel,
+			Steinberg::int32 noteExpressionIndex,
+			Steinberg::Vst::NoteExpressionTypeInfo& info /*out*/
+		)
 		{
-			if (busIndex == 0 && channel == 0)
+			if (busIndex == 0 
+				&& 
+				channel == 0)
 			{
-				return m_noteExpressionTypes.getNoteExpressionInfo(noteExpressionIndex, info);
+				return m_noteExpressionTypes.getNoteExpressionInfo
+				(
+					noteExpressionIndex, 
+					info
+				);
 			}
 			return Steinberg::kResultFalse;
 		}
 		
 		//------------------------------------------------------------------------
-		Steinberg::tresult PLUGIN_API Controller::getNoteExpressionStringByValue(Steinberg::int32 busIndex,
-			                                                                     Steinberg::int16 channel,
-			                                                                     Steinberg::Vst::NoteExpressionTypeID id,
-			                                                                     Steinberg::Vst::NoteExpressionValue valueNormalized /*in*/,
-			                                                                     Steinberg::Vst::String128 string /*out*/)
+		Steinberg::tresult PLUGIN_API Controller::getNoteExpressionStringByValue
+		(
+			Steinberg::int32 busIndex,
+			Steinberg::int16 channel,
+			Steinberg::Vst::NoteExpressionTypeID id,
+			Steinberg::Vst::NoteExpressionValue valueNormalized /*in*/,
+			Steinberg::Vst::String128 string /*out*/
+		)
 		{
-			if (busIndex == 0 && channel == 0)
+			if (busIndex == 0 
+				&& 
+				channel == 0)
 			{
-				return m_noteExpressionTypes.getNoteExpressionStringByValue(id, valueNormalized, string);
+				return m_noteExpressionTypes.getNoteExpressionStringByValue
+				(
+					id, 
+					valueNormalized, 
+					string
+				);
 			}
 			return Steinberg::kResultFalse;
 		}
 		
 		//------------------------------------------------------------------------
-		Steinberg::tresult PLUGIN_API Controller::getNoteExpressionValueByString(Steinberg::int32 busIndex,
-			                                                                     Steinberg::int16 channel,
-			                                                                     Steinberg::Vst::NoteExpressionTypeID id,
-			                                                                     const Steinberg::Vst::TChar* string /*in*/,
-				                                                                  Steinberg::Vst::NoteExpressionValue& valueNormalized /*out*/)
+		Steinberg::tresult PLUGIN_API Controller::getNoteExpressionValueByString
+		(
+			Steinberg::int32 busIndex,
+			Steinberg::int16 channel,
+			Steinberg::Vst::NoteExpressionTypeID id,
+			const Steinberg::Vst::TChar* string /*in*/,
+			Steinberg::Vst::NoteExpressionValue& valueNormalized /*out*/
+		)
 		{
-			if (busIndex == 0 && channel == 0)
+			if (busIndex == 0 
+				&& 
+				channel == 0)
 			{
-				return m_noteExpressionTypes.getNoteExpressionValueByString(id, string, valueNormalized);
+				return m_noteExpressionTypes.getNoteExpressionValueByString
+				(
+					id, 
+					string, 
+					valueNormalized
+				);
 
 			}
 			return Steinberg::kResultFalse;
 		}
 		
 		//------------------------------------------------------------------------
-		Steinberg::tresult PLUGIN_API Controller::getMidiControllerAssignment(Steinberg::int32 busIndex,
-																			 Steinberg::int16 channel,
-																			 Steinberg::Vst::CtrlNumber midiControllerNumber,
-																			 Steinberg::Vst::ParamID& id/*out*/)
+		Steinberg::tresult PLUGIN_API Controller::getMidiControllerAssignment
+		(
+			Steinberg::int32 busIndex,
+			Steinberg::int16 channel,
+			Steinberg::Vst::CtrlNumber midiControllerNumber,
+			Steinberg::Vst::ParamID& id/*out*/
+		)
 {
-			if (busIndex == 0 && channel == 0)
+			if (busIndex == 0 
+				&& 
+				channel == 0)
 			{
 				id = 0;
 				switch (midiControllerNumber)

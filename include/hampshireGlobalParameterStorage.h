@@ -23,8 +23,15 @@ namespace Carlsound
 		{
 			Steinberg::Vst::ParamValue paramValueQtyHarmonics;	// [0, +1]
 			//
-			Steinberg::tresult setState(Steinberg::IBStream* stream);
-			Steinberg::tresult getState(Steinberg::IBStream* stream);
+			Steinberg::tresult setState
+			(
+				Steinberg::IBStream* stream
+			);
+			//
+			Steinberg::tresult getState
+			(
+				Steinberg::IBStream* stream
+			);
 		};
 	} // namespace Hampshire
 } // namespace Carlsound

@@ -27,6 +27,5 @@ namespace Carlsound
 				a *= k;
 			}
 		}
-
 	} // namespace Hampshire
 } // namespace Carlsound

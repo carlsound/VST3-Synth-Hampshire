@@ -18,7 +18,10 @@ namespace Carlsound
 		{
 		public:
 			//------------------------------------------------------------------------
-			static double normalizedLevel2Gain(float normalized);
+			static double normalizedLevel2Gain
+			(
+				float normalized
+			);
 		};
 	} // namespace Hampshire
 } // namespace Carlsound

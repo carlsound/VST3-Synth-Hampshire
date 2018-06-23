@@ -5,9 +5,16 @@ namespace Carlsound
 	namespace Hampshire
 	{
 		//-----------------------------------------------------------------------------
-		Steinberg::tresult GlobalParameterStorage::setState(Steinberg::IBStream* state)
+		Steinberg::tresult GlobalParameterStorage::setState
+		(
+			Steinberg::IBStream* state
+		)
 		{
-			Steinberg::IBStreamer streamer(state, kLittleEndian);
+			Steinberg::IBStreamer streamer
+			(
+				state, 
+				kLittleEndian
+			);
 			Steinberg::uint64 version = 0;
 			double dDoubleParam = 0;
 			// version 0
@@ -37,9 +44,16 @@ namespace Carlsound
 		}
 
 		//-----------------------------------------------------------------------------
-		Steinberg::tresult GlobalParameterStorage::getState(Steinberg::IBStream* state)
+		Steinberg::tresult GlobalParameterStorage::getState
+		(
+			Steinberg::IBStream* state
+		)
 		{
-			Steinberg::IBStreamer streamer(state, kLittleEndian);
+			Steinberg::IBStreamer streamer
+			(
+				state, 
+				kLittleEndian
+			);
 
 			// version 0
 			//if (!streamer.writeInt64u(currentParamStateVersion)) return Steinberg::kResultFalse;
