@@ -1,45 +1,50 @@
 #pragma once
-
+//
 #include "hampshireGlobalParameterStorage.h"
 #include "hampshireController.h"
 #include "hampshireVoiceStatics.h"
 #include "hampshireVoiceStaticsOnce.h"
 #include "maximilian.h"
-
+//
 #include "public.sdk/samples/vst/common/voicebase.h"
 #include "public.sdk/samples/vst/common/logscale.h"
-
+//
 #include "pluginterfaces/vst/ivstevents.h"
 #include "pluginterfaces/base/futils.h"
-
+//
 #include "base/source/fstreamer.h"
-
+//
 #include <cmath>
 #include <algorithm>
-
+//
 #ifndef M_PI
 #define M_PI			3.14159265358979323846
 #endif
 #ifndef M_PI_MUL_2
 #define M_PI_MUL_2		6.28318530717958647692
 #endif
-
+//
 namespace Carlsound
 {
 	namespace Hampshire
 	{
 		//-----------------------------------------------------------------------------
 		template<class SamplePrecision>
-		class Voice : public Steinberg::Vst::VoiceBase<kNumParameters, 
-			                                           SamplePrecision,
-			                                           2, 
-			                                           GlobalParameterStorage>
+		class Voice : public Steinberg::Vst::VoiceBase
+		<
+			kNumParameters, 
+			SamplePrecision,
+			2, 
+			GlobalParameterStorage
+		>
 		{
 		public:
 			//-----------------------------------------------------------------------------
 			Voice ()
 			{
 				//filter = new Filter (Filter::kLowpass);
+				m_oscillator = std::make_shared<maxiOsc>();
+				m_oscillatorSettings = std::make_shared<maxiSettings>();
 			}
 			//
 			//-----------------------------------------------------------------------------

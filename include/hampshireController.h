@@ -1,23 +1,21 @@
-///------------------------------------------------------------------------
-
 #pragma once
-
+//
 #include "../include/hampshireIDs.h"
 #include "hampshireVoice.h"
 #include "hampshireGlobalParameterStorage.h"
 #include "hampshireVoiceStaticsOnce.h"
-
+//
 #include "public.sdk/source/vst/vsteditcontroller.h"
 #include "pluginterfaces/vst/ivstnoteexpression.h"
 #include "public.sdk/source/vst/vstnoteexpressiontypes.h"
 #include <memory>
-
+//
 #if SMTG_OS_WINDOWS
 #include <atlconv.h>
 #endif
-
+//
 #include <codecvt>
-
+//
 namespace Carlsound
 {
 	namespace Hampshire

@@ -1,11 +1,11 @@
 #pragma once
-
+//
 #include "pluginterfaces/vst/vsttypes.h"
 #include "public.sdk/samples/vst/common/logscale.h"
-
+//
 #include <cmath>
 #include <algorithm>
-
+//
 namespace Carlsound
 {
 	namespace Hampshire
@@ -36,6 +36,13 @@ namespace Carlsound
 		extern const double kNormTuningOneOctave;	// full in VST 3 is +- 10 octaves
 		extern const double kNormTuningOneTune;
 		*/
+		//
+		float freqTab[kNumFrequencies];
+		//
+		Steinberg::Vst::LogScale<Steinberg::Vst::ParamValue> freqLogScale(0., 1., 80., 18000., 0.5, 1800.);
+		//
+		const double kNormTuningOneOctave = 12.0 / 240.0;	// full in VST 3 is +- 10 octaves
+		const double kNormTuningOneTune = 1.0 / 240.0;
 		//
 		//-----------------------------------------------------------------------------
 		class VoiceStaticsOnce

@@ -1,14 +1,14 @@
 #pragma once
-
+//
 #include "../include/hampshireIDs.h"
 #include "../include/hampshireVoiceStaticsOnce.h"
-
+//
 #include "pluginterfaces/base/ftypes.h"
 #include "pluginterfaces/base/ibstream.h"
 #include "pluginterfaces/vst/vsttypes.h"
 #include "base/source/fstreamer.h"
 #include "public.sdk/source/vst/vsteditcontroller.h"
-
+//
 namespace Carlsound
 {
 	namespace Hampshire

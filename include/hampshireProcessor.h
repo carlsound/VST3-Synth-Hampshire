@@ -1,20 +1,20 @@
 //------------------------------------------------------------------------
 #pragma once
-
+//
 #define _USE_MATH_DEFINES 
 #include <cmath>
-
+//
 #include "public.sdk/source/vst/vstaudioeffect.h"
-
+//
 #include "hampshireGlobalParameterStorage.h"
 #include "hampshireVoice.h"
 #include "hampshireIDs.h"
-
+//
 #include "maximilian.h"
 #include <public.sdk/source/vst/vstparameters.h>
 #include <public.sdk/samples/vst/common/voiceprocessor.h>
 #include <pluginterfaces/base/smartpointer.h>
-
+//
 namespace Carlsound
 {
 	namespace Hampshire

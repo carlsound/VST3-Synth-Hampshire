@@ -4,14 +4,12 @@ namespace Carlsound
 {
 	namespace Hampshire
 	{
-		float freqTab[kNumFrequencies];
-		//const float scaleHeadRoom = (float)(pow(10.0, -12.0 / 20.0) * 0.70710677); // for 12 dB head room
-		//const float scaleNorm2GainC1 = (float)(scaleHeadRoom * pow(10.0, 24.0 / 20.0));
-		//const float scaleNorm2GainC2 = (float)(24.0 / 20.0 / 0.30102999566398119521373889472449); // Mathd::kLog2
-		Steinberg::Vst::LogScale<Steinberg::Vst::ParamValue> freqLogScale(0., 1., 80., 18000., 0.5, 1800.);
+		//float freqTab[kNumFrequencies];
 		//
-		const double kNormTuningOneOctave = 12.0 / 240.0;	// full in VST 3 is +- 10 octaves
-		const double kNormTuningOneTune = 1.0 / 240.0;
+		//Steinberg::Vst::LogScale<Steinberg::Vst::ParamValue> freqLogScale(0., 1., 80., 18000., 0.5, 1800.);
+		//
+		//const double kNormTuningOneOctave = 12.0 / 240.0;	// full in VST 3 is +- 10 octaves
+		//const double kNormTuningOneTune = 1.0 / 240.0;
 		//
 		VoiceStaticsOnce::VoiceStaticsOnce()
 		{
