@@ -35,6 +35,6 @@
 #define stringCompanyName		"Carlsound\0"
 #define stringCompanyWeb		"http://www.carlsound.net"
 #define stringCompanyEmail		"mailto:john.carlson@carlsound.net"
-
+//
 #define stringLegalCopyright	"� 2018 John Carlson"
 #define stringLegalTrademarks	"VST is a trademark of Steinberg Media Technologies GmbH"

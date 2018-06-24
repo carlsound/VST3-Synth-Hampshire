@@ -1,35 +1,30 @@
-
 #include "../include/hampshireProcessor.h"
-
-#include "public.sdk/samples/vst/common/voiceprocessor.h"
-#include "pluginterfaces/base/ustring.h"
-
-#include "base/source/fstreamer.h"
-#include "pluginterfaces/base/ibstream.h"
-#include "pluginterfaces/vst/ivstparameterchanges.h"
-#include <public.sdk/source/vst/vstaudioprocessoralgo.h>
-#include "pluginterfaces/vst/vsttypes.h"
-
-#include <algorithm>
-
+//
+//#include "public.sdk/samples/vst/common/voiceprocessor.h"
+//#include "pluginterfaces/base/ustring.h"
+//
+//#include "base/source/fstreamer.h"
+//#include "pluginterfaces/base/ibstream.h"
+//#include "pluginterfaces/vst/ivstparameterchanges.h"
+//#include <public.sdk/source/vst/vstaudioprocessoralgo.h>
+//#include "pluginterfaces/vst/vsttypes.h"
+//
+//#include <algorithm>
+//
 namespace Carlsound
 {
 	namespace Hampshire
 	{
-
 		//-----------------------------------------------------------------------------
-		Processor::Processor () : m_voiceProcessor
-		(
-			0
-		)
+		Processor::Processor ()
 		{
 			// register its editor class
 			setControllerClass
 			(
 				MyControllerUID
 			);
+			m_voiceProcessor = NULL;
 		}
-
 		//-----------------------------------------------------------------------------
 		Steinberg::tresult PLUGIN_API Processor::initialize 
 		(
@@ -58,6 +53,16 @@ namespace Carlsound
 			);
 			//
 			/*
+			m_voiceProcessor = std::make_shared
+			<
+				Steinberg::Vst::VoiceProcessor
+			>
+			(
+
+			);
+			*/
+			//
+			/*
 			m_oscillator[0] = std::make_shared<maxiOsc>();
 			m_oscillator[1] = std::make_shared<maxiOsc>();
 			//
@@ -81,8 +86,6 @@ namespace Carlsound
 			);
 			*/
 			//
-			m_voiceProcessor = 0;
-			//
 			m_globalParameterStorage = std::make_shared
 			<
 				GlobalParameterStorage
@@ -91,7 +94,6 @@ namespace Carlsound
 			//
 			return Steinberg::kResultTrue;
 		}
-
 		//-----------------------------------------------------------------------------
 		Steinberg::tresult PLUGIN_API Processor::setBusArrangements
 		(
@@ -118,7 +120,6 @@ namespace Carlsound
 			}
 			return Steinberg::kResultFalse;
 		}
-
 		//-----------------------------------------------------------------------------
 		Steinberg::tresult PLUGIN_API Processor::setState
 		(
@@ -130,7 +131,6 @@ namespace Carlsound
 				state
 			);
 		}
-
 		//------------------------------------------------------------------------
 		Steinberg::tresult PLUGIN_API Processor::getState
 		(
@@ -157,7 +157,6 @@ namespace Carlsound
 			}
 			return Steinberg::kResultFalse;
 		}
-
 		//-----------------------------------------------------------------------------
 		Steinberg::tresult PLUGIN_API Processor::setActive
 		(
@@ -172,32 +171,43 @@ namespace Carlsound
 				{
 					if (processSetup.symbolicSampleSize == Steinberg::Vst::kSample32)
 					{
-						m_voiceProcessor = std::make_shared<
-							Steinberg::Vst::VoiceProcessorImplementation<
+						/*
+						m_voiceProcessorImplementation = std::make_shared
+						<
+							Steinberg::Vst::VoiceProcessorImplementation
+							<
 								float, // precision
 						        Voice<float>, // voice class
 						        2, // numChannels
 						        MAX_VOICES, // maxVoices
-						        GlobalParameterStorage>
-						        >(
-									(float)processSetup.sampleRate,
-									&m_globalParameterStorage
-								  );
+						        GlobalParameterStorage
+							>
+						>
+						(
+							(float)processSetup.sampleRate, // sample rate
+							&*m_globalParameterStorage       // GlobalParameterStorage
+						);
+						*/
 					}
 					else if (processSetup.symbolicSampleSize == Steinberg::Vst::kSample64)
 					{
-						m_voiceProcessor = std::make_shared<
-							Steinberg::Vst::VoiceProcessorImplementation<
+						/*
+						m_voiceProcessorImplementation = std::make_shared
+						<
+							Steinberg::Vst::VoiceProcessorImplementation
+							<
 								double, // precision
 								Voice<double>, // voice class
 								2, // numChannels
 								MAX_VOICES, // maxVoices
 								GlobalParameterStorage
-							    >
-						        >(
-									(float)processSetup.sampleRate, 
-									&m_globalParameterStorage
-								  );
+							>
+						>
+						(
+							(double)processSetup.sampleRate, // sample rate
+							&*m_globalParameterStorage        // GlobalParameterStorage
+						);
+						*/
 					}
 					else
 					{
@@ -212,7 +222,6 @@ namespace Carlsound
 			}
 			return AudioEffect::setActive (state);
 		}
-		
 		//-----------------------------------------------------------------------------
 		/*
 		template<class T>
@@ -230,7 +239,17 @@ namespace Carlsound
 			*outBuffer = *inBuffer * gainValue;
 		}
 		*/
-		
+		//-----------------------------------------------------------------------------
+		/*
+		template<class SamplePrecision>
+		inline void processTemplate
+		(
+			SamplePrecision samplePrecision
+		)
+		{
+
+		}
+		*/
 		//-----------------------------------------------------------------------------
 		Steinberg::tresult PLUGIN_API Processor::process
 		(
@@ -305,7 +324,6 @@ namespace Carlsound
 			}
 			return result;
 		}
-
 		//------------------------------------------------------------------------
 	} // namespace Hampshire
 } // namespace Carlsound
