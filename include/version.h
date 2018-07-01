@@ -21,13 +21,14 @@
 #define VERSION_STR MAJOR_VERSION_STR "." SUB_VERSION_STR "." RELEASE_NUMBER_STR
 //
 // HERE you have to define your plug-in, company name, email and web
-#define stringPluginName		"Hampshire"
 //
 #if SMTG_PLATFORM_64
+#define stringPluginName		"Hampshire-x64"
 #define stringOriginalFilename	"Hampshire-x64.vst3"
 #define stringFileDescription	stringPluginName" VST3-SDK (64 Bit)"
 //
 #else
+#define stringPluginName		"Hampshire-x86"
 #define stringOriginalFilename	"Hampshire-x86.vst3"
 #define stringFileDescription	stringPluginName" VST3-SDK (32 Bit)"
 #endif
