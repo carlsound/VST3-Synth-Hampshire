@@ -34,14 +34,19 @@ set(synth_sources
 )
 
 #--- HERE change the target Name for your plug-in (for ex. set(target myDelay))-------
-set(target Hampshire)
+if(MAC)
+	set(target Hampshire)
+    smtg_set_bundle(${target} INFOPLIST "${CMAKE_CURRENT_LIST_DIR}/resource/Info.plist" PREPROCESS)
+elseif((WIN) AND (CMAKE_SIZEOF_VOID_P EQUAL "8"))
+    set(target Hampshire-x64)
+elseif(WIN)
+	set(target Hampshire-x86)
+endif()
 
 smtg_add_vst3plugin(${target} ${SDK_ROOT} ${synth_sources})
 set_target_properties(${target} PROPERTIES ${SDK_IDE_MYPLUGINS_FOLDER})
 target_link_libraries(${target} PRIVATE base sdk)
 
-if(MAC)
-    smtg_set_bundle(${target} INFOPLIST "${CMAKE_CURRENT_LIST_DIR}/resource/Info.plist" PREPROCESS)
-elseif(WIN)
+if(WIN)
     target_sources(${target} PRIVATE resource/plug.rc)
 endif()
