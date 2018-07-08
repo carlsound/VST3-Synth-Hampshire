@@ -37,9 +37,9 @@ set(synth_sources
 if(MAC)
 	set(target Hampshire)
 elseif((WIN) AND (CMAKE_SIZEOF_VOID_P EQUAL "8"))
-    set(target Hampshire-x64)
+    set(target Hampshire_x64)
 elseif(WIN)
-	set(target Hampshire-x86)
+	set(target Hampshire_x86)
 endif()
 
 smtg_add_vst3plugin(${target} ${SDK_ROOT} ${synth_sources})
