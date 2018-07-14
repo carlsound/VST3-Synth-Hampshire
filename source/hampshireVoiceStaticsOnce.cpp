@@ -14,15 +14,15 @@ namespace Carlsound
 		VoiceStaticsOnce::VoiceStaticsOnce()
 		{
 			// make frequency (Hz) table
-			double k = 1.059463094359;	// 12th root of 2
-			double a = 6.875;	// a
-			a *= k;	// b
-			a *= k;	// bb
-			a *= k;	// c, frequency of midi note 0
+			double twelfthRootOfTwo = 1.059463094359;	// 12th root of 2
+			double noteFrequency = 6.875;	// note A (octave -6)
+			noteFrequency *= twelfthRootOfTwo;	// note B (octave -6)
+			noteFrequency *= twelfthRootOfTwo;	// note Bb / C# (octave -6)
+			noteFrequency *= twelfthRootOfTwo;	// note C (octave -5), frequency of midi note 0
 			for (Steinberg::int32 i = 0; i < kNumFrequencies; i++)	// 128 midi notes
 			{
-				freqTab[i] = (float)a;
-				a *= k;
+				midiNotesFrequencyLookupTable[i] = (float) noteFrequency;
+				noteFrequency *= twelfthRootOfTwo;
 			}
 		}
 	} // namespace Hampshire

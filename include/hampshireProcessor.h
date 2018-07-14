@@ -9,6 +9,7 @@
 #include "hampshireVoice.h"
 #include "hampshireVoiceStaticsOnce.h"
 #include "maximilian.h"
+#include "voiceProcessor.h"
 //
 #include <algorithm>
 //
@@ -20,10 +21,11 @@
 #include <pluginterfaces/base/ustring.h>
 #include <pluginterfaces/vst/vsttypes.h>
 //
+//#include <public.sdk/samples/vst/common/voiceprocessor.h>
+//
 #include "public.sdk/source/vst/vstaudioeffect.h"
 #include <public.sdk/source/vst/vstaudioprocessoralgo.h>
 #include <public.sdk/source/vst/vstparameters.h>
-#include <public.sdk/samples/vst/common/voiceprocessor.h>
 //
 #include <pluginterfaces/base/smartpointer.h>
 #include <pluginterfaces/base/ustring.h>
@@ -101,46 +103,43 @@ namespace Carlsound
 				return (Steinberg::Vst::IAudioProcessor*)new Processor ();
 			}
 			//
-			protected:
+		protected:
 			//-----------------------------------------------------------------------------
 			float m_sampleRate;
-			//Steinberg::IPtr<GlobalParameterStorage> m_globalParameterStorage;
 			std::shared_ptr<GlobalParameterStorage> m_globalParameterStorage;
-			//
-		    //Steinberg::IPtr<Steinberg::Vst::VoiceProcessor> m_voiceProcessor;
-			std::shared_ptr<Steinberg::Vst::VoiceProcessor> m_voiceProcessor;
+			std::shared_ptr<Carlsound::Vst::VoiceProcessor> m_voiceProcessor;
 			//
 			template
-			<	
-				class Precision, 
-				class VoiceClass, 
-				Steinberg::int32 numChannels, 
-				Steinberg::int32 maxVoices, 
-				class GlobalParameterStorage
-			>
-			static std::shared_ptr
-			<
-				Steinberg::Vst::VoiceProcessorImplementation
 				<
-					Precision, 
-					VoiceClass, 
-					2, 
-					MAX_VOICES, 
-					GlobalParameterStorage
+				class Precision,
+				class VoiceClass,
+				Steinberg::int32 numChannels,
+				Steinberg::int32 maxVoices,
+				class GlobalParameterStorage
 				>
-			> m_voiceProcessorImplementation;
+				static std::shared_ptr
+				<
+					Carlsound::Vst::VoiceProcessorImplementation
+					<
+						Precision,
+						VoiceClass,
+						kNumChannels,
+						MAX_VOICES,
+						GlobalParameterStorage
+					>
+				> m_voiceProcessorImplementation;
 			//
 			template
-			<
+				<
 				class SamplePrecision
-			>
-			static std::shared_ptr
-			<
+				>
+				static std::shared_ptr
+				<
 				Carlsound::Hampshire::Voice
 				<
-					SamplePrecision
+				SamplePrecision
 				>
-			> m_voice;
+				> m_voice;
 		};
 		
 		//------------------------------------------------------------------------

@@ -5,8 +5,9 @@
 #include "hampshireVoiceStatics.h"
 #include "hampshireVoiceStaticsOnce.h"
 #include "maximilian.h"
+#include "voiceBase.h"
 //
-#include "public.sdk/samples/vst/common/voicebase.h"
+//#include "public.sdk/samples/vst/common/voicebase.h"
 #include "public.sdk/samples/vst/common/logscale.h"
 //
 #include "pluginterfaces/vst/ivstevents.h"
@@ -33,11 +34,11 @@ namespace Carlsound
 		//-----------------------------------------------------------------------------
 		template<class SamplePrecision>
 		//
-		class Voice : public Steinberg::Vst::VoiceBase
+		class Voice : public Carlsound::Vst::VoiceBase
 		<
-			Carlsound::Hampshire::kNumParameters, // numValues
+			Carlsound::Hampshire::kNumParameters,
 			SamplePrecision,
-			2,              // numChannels
+			Carlsound::Hampshire::kNumChannels,
 			GlobalParameterStorage
 		>
 		{
@@ -47,11 +48,11 @@ namespace Carlsound
 			{
 				m_voiceBase = std::make_shared
 				<
-					Steinberg::Vst::VoiceBase
+					Carlsound::Vst::VoiceBase
 					<
-						kNumParameters, // numValues
+						kNumParameters,
 						SamplePrecision,
-						2,              // numChannels
+						Carlsound::Hampshire::kNumChannels,
 						GlobalParameterStorage
 					>
 				>();
@@ -74,15 +75,6 @@ namespace Carlsound
 				SMTG_OVERRIDE
 			{
 				//filter->setSampleRate (sampleRate);
-				/*
-				Steinberg::Vst::VoiceBase
-				<
-					kNumParameters,
-					SamplePrecision,
-					2,
-					GlobalParameterStorage
-				>::setSampleRate(sampleRate);
-				*/
 				m_voiceBase->setSampleRate(sampleRate);
 				m_oscillatorSettings->sampleRate = sampleRate;
 			}
@@ -100,15 +92,35 @@ namespace Carlsound
 			)
 				SMTG_OVERRIDE
 			{
-				switch (index)
+				switch (index) // ivstnoteexpression.h enum NoteExpressionTypeIDs: kVolumTypeID, kPanTypeID, kTuningTypeID, kVibratoTypeID, kExpressionTypeID, kBrightnessTypeID, kTextTypeID, kPhonemeTypeID
 				{
 					//------------------------------
 					case Steinberg::Vst::kVolumeTypeID:
 					{
-						//Steinberg::Vst::ParamValue vol = VoiceStatics::normalizedLevel2Gain ((float)value);
-						//Steinberg::Vst::VoiceBase<kNumParameters, SamplePrecision, 2, GlobalParameterState>::setNoteExpressionValue (kVolumeMod, vol);
+						/*
+						Steinberg::Vst::ParamValue vol = VoiceStatics::normalizedLevel2Gain ((float) value);
+						m_voiceBase->setNoteExpressionValue
+							(
+								kVolumeMod, 
+								vol
+							);
+						*/
 						break;
 					}
+					//------------------------------
+					case Steinberg::Vst::kPanTypeID:{ break; }
+					//------------------------------
+					case Steinberg::Vst::kTuningTypeID:{ break; }
+					//------------------------------
+					case Steinberg::Vst::kVibratoTypeID:{ break; }
+					//------------------------------
+					case Steinberg::Vst::kExpressionTypeID:{ break; }
+					//------------------------------
+					case Steinberg::Vst::kBrightnessTypeID:{ break; }
+					//------------------------------
+					case Steinberg::Vst::kTextTypeID:{ break; }
+					//------------------------------
+					case Steinberg::Vst::kPhonemeTypeID:{ break; }
 					//------------------------------
 					default:
 					{
@@ -117,19 +129,6 @@ namespace Carlsound
 							index,
 							value
 						);
-						/*
-						Steinberg::Vst::VoiceBase
-						<
-							kNumParameters,
-							SamplePrecision,
-							2,
-							GlobalParameterStorage
-						>::setNoteExpressionValue
-						(
-							index,
-							value
-						);
-						*/
 						break;
 					}
 				}
@@ -168,6 +167,14 @@ namespace Carlsound
 					nId
 				);
 				*/
+				m_voiceBase->noteOn
+				(
+					pitch,
+					velocity,
+					tuning,
+					sampleOffset,
+					nId
+				);
 				this->noteOnSampleOffset++;
 			}
 			//
@@ -179,13 +186,16 @@ namespace Carlsound
 			) 
 				SMTG_OVERRIDE
 			{
+				/*
 				Steinberg::Vst::VoiceBase
 				<
 					kNumParameters, 
-					 SamplePrecision, 
-					 2, 
-					 GlobalParameterStorage
+					SamplePrecision, 
+					Carlsound::Hampshire::kNumChannels,
+					GlobalParameterStorage
 				>::noteOff
+				*/
+				m_voiceBase->noteOff
 				(
 					velocity, 
 					sampleOffset
@@ -259,8 +269,6 @@ namespace Carlsound
 			() 
 				SMTG_OVERRIDE
 			{
-				noiseStep = 1;
-				noisePos = 0;
 				n = 0;
 				//sinusPhase = trianglePhase = 0.;
 				//currentSinusF = currentTriangleF = -1.;
@@ -268,36 +276,42 @@ namespace Carlsound
 
 				noteOffVolumeRamp = 0.005;
 
+				/*
 				Steinberg::Vst::VoiceBase
 				<
 					kNumParameters, 
 					SamplePrecision, 
-					2, 
+					Carlsound::Hampshire::kNumChannels,
 					GlobalParameterStorage
 				>::reset();
+				*/
+				m_voiceBase->reset();
 			}
+			//
+			//-----------------------------------------------------------------------------
 			//
 		protected:
 			//-----------------------------------------------------------------------------
 			Steinberg::uint32 n;
-			Steinberg::int32 noisePos;
-			Steinberg::int32 noiseStep;
 			//
 			Steinberg::Vst::ParamValue currentVolume;
 			//
 			Steinberg::Vst::ParamValue levelFromVel;
 			Steinberg::Vst::ParamValue noteOffVolumeRamp;
 			//
-			std::shared_ptr<Steinberg::Vst::VoiceBase 
-			<
-				kNumParameters, 
-				SamplePrecision, 
-				2, 
-				GlobalParameterStorage
-			> > m_voiceBase;
-			//
 			std::shared_ptr<maxiOsc> m_oscillator;
 			std::shared_ptr<maxiSettings> m_oscillatorSettings;
+			//
+			std::shared_ptr
+				<
+				Carlsound::Vst::VoiceBase
+				<
+				kNumParameters,
+				SamplePrecision,
+				Carlsound::Hampshire::kNumChannels,
+				GlobalParameterStorage
+				>
+				> m_voiceBase;
 		};
 	} // Hampshire
 } // Carlsound

@@ -172,9 +172,10 @@ namespace Carlsound
 			};
 			*/
 			//
+			Steinberg::Vst::NoteExpressionTypeContainer m_noteExpressionTypes;
 			////////////////////////////////////////////////////////////////////////////////
 			protected:
-			Steinberg::Vst::NoteExpressionTypeContainer m_noteExpressionTypes;
+			
 		};
 		//
 		//------------------------------------------------------------------------

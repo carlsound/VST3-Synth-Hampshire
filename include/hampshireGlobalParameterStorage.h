@@ -13,7 +13,10 @@ namespace Carlsound
 {
 	namespace Hampshire
 	{
-		#define MAX_VOICES				64
+		//#ifndef MAX_VOICES
+		//#define MAX_VOICES				10
+		//#endif // !MAX_VOICES
+		//
 		#define MAX_RELEASE_TIME_SEC	5.0
 		#define NUM_FILTER_TYPE			3
 		#define NUM_TUNING_RANGE		2 

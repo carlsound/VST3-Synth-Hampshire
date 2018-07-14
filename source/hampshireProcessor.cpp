@@ -1,16 +1,5 @@
 #include "../include/hampshireProcessor.h"
 //
-//#include "public.sdk/samples/vst/common/voiceprocessor.h"
-//#include "pluginterfaces/base/ustring.h"
-//
-//#include "base/source/fstreamer.h"
-//#include "pluginterfaces/base/ibstream.h"
-//#include "pluginterfaces/vst/ivstparameterchanges.h"
-//#include <public.sdk/source/vst/vstaudioprocessoralgo.h>
-//#include "pluginterfaces/vst/vsttypes.h"
-//
-//#include <algorithm>
-//
 namespace Carlsound
 {
 	namespace Hampshire
@@ -171,14 +160,22 @@ namespace Carlsound
 				{
 					if (processSetup.symbolicSampleSize == Steinberg::Vst::kSample32)
 					{
-						/*
-						m_voiceProcessorImplementation = std::make_shared
+						
+						m_voiceProcessorImplementation
 						<
-							Steinberg::Vst::VoiceProcessorImplementation
+							float,
+							Voice<float>,
+							kNumChannels,
+							MAX_VOICES,
+							GlobalParameterStorage
+						>
+							= std::make_shared
+						<
+							Carlsound::Vst::VoiceProcessorImplementation
 							<
 								float, // precision
 						        Voice<float>, // voice class
-						        2, // numChannels
+						        kNumChannels, // numChannels
 						        MAX_VOICES, // maxVoices
 						        GlobalParameterStorage
 							>
@@ -187,18 +184,26 @@ namespace Carlsound
 							(float)processSetup.sampleRate, // sample rate
 							&*m_globalParameterStorage       // GlobalParameterStorage
 						);
-						*/
+						
 					}
 					else if (processSetup.symbolicSampleSize == Steinberg::Vst::kSample64)
 					{
-						/*
-						m_voiceProcessorImplementation = std::make_shared
+						
+						m_voiceProcessorImplementation
 						<
-							Steinberg::Vst::VoiceProcessorImplementation
+							double,
+							Voice<double>,
+							kNumChannels,
+							MAX_VOICES,
+							GlobalParameterStorage
+						>
+							= std::make_shared
+						<
+							Carlsound::Vst::VoiceProcessorImplementation
 							<
 								double, // precision
 								Voice<double>, // voice class
-								2, // numChannels
+								kNumChannels, // numChannels
 								MAX_VOICES, // maxVoices
 								GlobalParameterStorage
 							>
@@ -207,7 +212,7 @@ namespace Carlsound
 							(double)processSetup.sampleRate, // sample rate
 							&*m_globalParameterStorage        // GlobalParameterStorage
 						);
-						*/
+						
 					}
 					else
 					{
@@ -298,14 +303,15 @@ namespace Carlsound
 				result = m_voiceProcessor->process(data);
 			if (result == Steinberg::kResultTrue)
 			{
+				/*
 				if (data.outputParameterChanges)
 				{
 					Steinberg::int32 index;
-					/*
-					Steinberg::Vst::IParamValueQueue* queue = data.outputParameterChanges->addParameterData(
+					Steinberg::Vst::IParamValueQueue* queue = data.outputParameterChanges->addParameterData
+					(
 						kParamActiveVoices, 
 						index
-						);
+					);
 					if (queue)
 					{
 						queue->addPoint(
@@ -313,8 +319,8 @@ namespace Carlsound
 							(Steinberg::Vst::ParamValue)m_voiceProcessor->getActiveVoices() / (Steinberg::Vst::ParamValue)MAX_VOICES, 
 							index);
 					}
-					*/
 				}
+				*/
 				if (m_voiceProcessor->getActiveVoices() == 0 
 					&& 
 					data.numOutputs > 0)

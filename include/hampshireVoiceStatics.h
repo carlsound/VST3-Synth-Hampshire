@@ -1,8 +1,9 @@
 #pragma once
 //
 #include "hampshireVoiceStaticsOnce.h"
+#include "voiceBase.h"
 //
-#include "public.sdk/samples/vst/common/voicebase.h"
+//#include "public.sdk/samples/vst/common/voicebase.h"
 #include "public.sdk/samples/vst/common/logscale.h"
 #include "public.sdk/samples/vst/note_expression_synth/source/note_expression_synth_voice.h"
 //

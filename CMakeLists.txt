@@ -24,6 +24,10 @@ set(synth_sources
     include/hampshireVoiceStaticsOnce.h
     source/hampshireVoiceStaticsOnce.cpp
     #---
+    include/voiceBase.h
+    #---
+    include/voiceProcessor.h
+    #---
     #---include/panNoteExpressionType.h
     #---
     #---include/releaseTimeModNoteExpressionType.h
