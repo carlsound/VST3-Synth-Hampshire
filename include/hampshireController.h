@@ -2,7 +2,7 @@
 //
 #include "../include/hampshireIDs.h"
 #include "hampshireVoice.h"
-#include "hampshireGlobalParameterStorage.h"
+#include "hampshireGlobalParameterState.h"
 #include "hampshireVoiceStaticsOnce.h"
 //
 #include "public.sdk/source/vst/vsteditcontroller.h"

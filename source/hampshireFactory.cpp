@@ -8,9 +8,9 @@
 
 #define stringSubCategory	"Instrument|Synth"	// Subcategory for this Plug-in (to be changed if needed, see PlugType in ivstaudioprocessor.h)
 
-BEGIN_FACTORY_DEF (stringCompanyName, stringCompanyWeb,	stringCompanyEmail)
+BEGIN_FACTORY_DEF(stringCompanyName, stringCompanyWeb, stringCompanyEmail)
 //
-	DEF_CLASS2 
+	DEF_CLASS2
 	(
 		INLINE_UID_FROM_FUID
 		(
@@ -24,7 +24,7 @@ BEGIN_FACTORY_DEF (stringCompanyName, stringCompanyWeb,	stringCompanyEmail)
 		FULL_VERSION_STR,		// Plug-in version (to be changed)
 		kVstVersionString,		// the VST 3 SDK version (do not changed this, use always this define)
 		Carlsound::Hampshire::Processor::createInstance // function pointer called when this component should be instantiated
-	)	
+	)
 	//
 	DEF_CLASS2
 	(

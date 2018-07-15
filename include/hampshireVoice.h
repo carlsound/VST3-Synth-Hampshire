@@ -1,6 +1,6 @@
 #pragma once
 //
-#include "hampshireGlobalParameterStorage.h"
+#include "hampshireGlobalParameterState.h"
 #include "hampshireController.h"
 #include "hampshireVoiceStatics.h"
 #include "hampshireVoiceStaticsOnce.h"
@@ -32,19 +32,19 @@ namespace Carlsound
 		static Steinberg::uint64 currentParamStateVersion = 3;
 
 		//-----------------------------------------------------------------------------
-		template<class SamplePrecision>
+		template<typename SamplePrecision>
 		//
 		class Voice : public Carlsound::Vst::VoiceBase
 		<
 			Carlsound::Hampshire::kNumParameters,
 			SamplePrecision,
 			Carlsound::Hampshire::kNumChannels,
-			GlobalParameterStorage
+			GlobalParameterState
 		>
 		{
 		public:
 			//-----------------------------------------------------------------------------
-			Voice ()
+			Voice()
 			{
 				m_voiceBase = std::make_shared
 				<
@@ -53,7 +53,7 @@ namespace Carlsound
 						kNumParameters,
 						SamplePrecision,
 						Carlsound::Hampshire::kNumChannels,
-						GlobalParameterStorage
+						GlobalParameterState
 					>
 				>();
 				//filter = new Filter (Filter::kLowpass);
@@ -303,15 +303,15 @@ namespace Carlsound
 			std::shared_ptr<maxiSettings> m_oscillatorSettings;
 			//
 			std::shared_ptr
-				<
+			<
 				Carlsound::Vst::VoiceBase
 				<
-				kNumParameters,
-				SamplePrecision,
-				Carlsound::Hampshire::kNumChannels,
-				GlobalParameterStorage
+					kNumParameters,
+					SamplePrecision,
+					Carlsound::Hampshire::kNumChannels,
+					GlobalParameterState
 				>
-				> m_voiceBase;
+			> m_voiceBase;
 		};
 	} // Hampshire
 } // Carlsound

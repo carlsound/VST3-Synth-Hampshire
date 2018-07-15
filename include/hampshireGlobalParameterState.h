@@ -3,10 +3,12 @@
 #include "../include/hampshireIDs.h"
 #include "../include/hampshireVoiceStaticsOnce.h"
 //
+#include "base/source/fstreamer.h"
+//
 #include "pluginterfaces/base/ftypes.h"
 #include "pluginterfaces/base/ibstream.h"
 #include "pluginterfaces/vst/vsttypes.h"
-#include "base/source/fstreamer.h"
+//
 #include "public.sdk/source/vst/vsteditcontroller.h"
 //
 namespace Carlsound
@@ -22,7 +24,7 @@ namespace Carlsound
 		#define NUM_TUNING_RANGE		2 
 
 		//-----------------------------------------------------------------------------
-		struct GlobalParameterStorage
+		struct GlobalParameterState
 		{
 			Steinberg::Vst::ParamValue paramValueQtyHarmonics;	// [0, +1]
 			//

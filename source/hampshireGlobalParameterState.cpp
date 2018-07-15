@@ -1,11 +1,11 @@
-#include "../include/hampshireGlobalParameterStorage.h"
+#include "../include/hampshireGlobalParameterState.h"
 
 namespace Carlsound
 {
 	namespace Hampshire
 	{
 		//-----------------------------------------------------------------------------
-		Steinberg::tresult GlobalParameterStorage::setState
+		Steinberg::tresult GlobalParameterState::setState
 		(
 			Steinberg::IBStream* state
 		)
@@ -44,7 +44,7 @@ namespace Carlsound
 		}
 
 		//-----------------------------------------------------------------------------
-		Steinberg::tresult GlobalParameterStorage::getState
+		Steinberg::tresult GlobalParameterState::getState
 		(
 			Steinberg::IBStream* state
 		)

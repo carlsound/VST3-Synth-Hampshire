@@ -12,8 +12,8 @@ set(synth_sources
     #---
     source/hampshireFactory.cpp
     #---
-    include/hampshireGlobalParameterStorage.h
-    source/hampshireGlobalParameterStorage.cpp
+    include/hampshireGlobalParameterState.h
+    source/hampshireGlobalParameterState.cpp
     #--
     include/hampshireVoice.h
     source/hampshireVoice.cpp
@@ -27,6 +27,9 @@ set(synth_sources
     include/voiceBase.h
     #---
     include/voiceProcessor.h
+    #---
+    include/hampshireVoiceProcessorImplementation32.h
+    include/hampshireVoiceProcessorImplementation64.h
     #---
     #---include/panNoteExpressionType.h
     #---
