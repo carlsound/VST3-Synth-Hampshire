@@ -57,8 +57,8 @@ namespace Carlsound
 					>
 				>();
 				//filter = new Filter (Filter::kLowpass);
-				m_oscillator = std::make_shared<maxiOsc>();
-				m_oscillatorSettings = std::make_shared<maxiSettings>();
+				m_maxiSynthSettings = std::make_shared<maxiSettings>();
+				m_maxiSynth = std::make_shared<maxiSynth>();
 			}
 			//
 			//-----------------------------------------------------------------------------
@@ -76,7 +76,7 @@ namespace Carlsound
 			{
 				//filter->setSampleRate (sampleRate);
 				m_voiceBase->setSampleRate(sampleRate);
-				m_oscillatorSettings->sampleRate = sampleRate;
+				m_maxiSynthSettings->sampleRate = sampleRate;
 			}
 			//-----------------------------------------------------------------------------
 			float getSampleRate() const
@@ -247,15 +247,16 @@ namespace Carlsound
 								return false;
 							}
 						}
-						SamplePrecision sample;
+						SamplePrecision sample = 0.5;
+						//m_maxiSynth->
 						//SamplePrecision osc = (SamplePrecision)sin(n * triangleFreq + trianglePhase);
 						//sample += (SamplePrecision)(sin(n * sinusFreq + sinusPhase) * currentSinusVolume);
 
 						n++;
 
 						// store in output
-						//outputBuffers[0][i] += (SamplePrecision)(sample * currentPanningLeft * currentVolume);
-						//outputBuffers[1][i] += (SamplePrecision)(sample * currentPanningRight * currentVolume);
+						outputBuffers[0][i] += (SamplePrecision)(sample);  //(sample * currentPanningLeft * currentVolume);
+						outputBuffers[1][i] += (SamplePrecision)(sample);  //(sample * currentPanningRight * currentVolume);
 
 						// ramp parameters
 						//currentVolume += volumeRamp;
@@ -273,18 +274,18 @@ namespace Carlsound
 				//sinusPhase = trianglePhase = 0.;
 				//currentSinusF = currentTriangleF = -1.;
 				//this->values[kVolumeMod] = 0.;
-
+				//
 				noteOffVolumeRamp = 0.005;
-
-				/*
-				Steinberg::Vst::VoiceBase
+				//
+				//Steinberg::Vst::VoiceBase
+				Carlsound::Vst::VoiceBase
 				<
 					kNumParameters, 
 					SamplePrecision, 
 					Carlsound::Hampshire::kNumChannels,
-					GlobalParameterStorage
+					GlobalParameterState
 				>::reset();
-				*/
+				//
 				m_voiceBase->reset();
 			}
 			//
@@ -299,8 +300,8 @@ namespace Carlsound
 			Steinberg::Vst::ParamValue levelFromVel;
 			Steinberg::Vst::ParamValue noteOffVolumeRamp;
 			//
-			std::shared_ptr<maxiOsc> m_oscillator;
-			std::shared_ptr<maxiSettings> m_oscillatorSettings;
+			std::shared_ptr<maxiSettings> m_maxiSynthSettings;
+			std::shared_ptr<maxiSynth> m_maxiSynth;
 			//
 			std::shared_ptr
 			<
