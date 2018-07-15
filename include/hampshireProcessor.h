@@ -195,6 +195,14 @@ namespace Carlsound
 							if (processSetup.symbolicSampleSize == Steinberg::Vst::kSample32)
 							{
 								m_samplePrecisionType = Steinberg::Vst::kSample32;
+								m_voiceProcessorImplementation32 = std::make_shared
+								<
+									VoiceProcessorImplementation32
+								>
+								(
+									(float)processSetup.sampleRate, // sample rate
+									&*m_globalParameterState       // GlobalParameterStorage
+								);
 								/*
 								m_voiceProcessorImplementation = std::make_shared
 								<
@@ -226,6 +234,14 @@ namespace Carlsound
 							else if (processSetup.symbolicSampleSize == Steinberg::Vst::kSample64)
 							{
 								m_samplePrecisionType = Steinberg::Vst::kSample64;
+								m_voiceProcessorImplementation64 = std::make_shared
+								<
+									VoiceProcessorImplementation64
+								>
+								(
+									(double)processSetup.sampleRate, // sample rate
+									&*m_globalParameterState       // GlobalParameterStorage
+								);
 								/*
 								m_voiceProcessorImplementation = std::make_shared
 								<
@@ -328,13 +344,16 @@ namespace Carlsound
 					kParamActiveVoices,
 					index
 					);
+					*/
+					/*
 					if (queue)
 					{
-					queue->addPoint(
-					0,
-					(Steinberg::Vst::ParamValue)m_voiceProcessor->getActiveVoices() / (Steinberg::Vst::ParamValue)MAX_VOICES,
-					index);
-					}
+						queue->addPoint
+						(
+							0,
+							(Steinberg::Vst::ParamValue)m_voiceProcessor->getActiveVoices() / (Steinberg::Vst::ParamValue)MAX_VOICES,
+							index
+						);
 					}
 					*/
 					if (
